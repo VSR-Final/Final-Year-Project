@@ -114,6 +114,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     return null;
                   },
                 ),
+                /*
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: _pickImage,
@@ -127,6 +128,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     width: 200.0,
                   ),
                 ],
+
+                 */
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {

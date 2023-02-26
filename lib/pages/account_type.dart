@@ -16,11 +16,12 @@ class AccountType extends StatelessWidget{
                   children:  [
                     const SizedBox(height: 50),
 
-                    const Icon(
-                      Icons.lock,
-                      size: 100,
+                    Image(
+                      image: AssetImage('assets/transparent_logo.png'),
+                      height: 400,
+                      width: 400,
                     ),
-                    const SizedBox(height: 50,),
+                    const SizedBox(height: 20,),
 
                     Container(
                       padding: const EdgeInsets.all(25),
