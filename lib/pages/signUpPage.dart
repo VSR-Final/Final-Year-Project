@@ -132,6 +132,10 @@ class _SignUpPageState extends State<SignUpPage> {
                  */
                 SizedBox(height: 16.0),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    fixedSize: Size(400, 50),
+                  ),
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       FirebaseAuth.instance

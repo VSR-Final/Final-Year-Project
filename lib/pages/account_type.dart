@@ -17,7 +17,7 @@ class AccountType extends StatelessWidget{
                     const SizedBox(height: 50),
 
                     Image(
-                      image: AssetImage('assets/transparent_logo.png'),
+                      image: AssetImage('assets/logo.png'),
                       height: 400,
                       width: 400,
                     ),

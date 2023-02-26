@@ -35,6 +35,10 @@ class LoginPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                fixedSize: Size(400, 50),
+              ),
               onPressed: () {
                 FirebaseAuth.instance
                     .createUserWithEmailAndPassword(
