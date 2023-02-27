@@ -1,4 +1,3 @@
-import 'package:finalyearproject/components/SignUp.dart';
 import 'package:finalyearproject/components/SupportButton.dart';
 import 'package:finalyearproject/components/button.dart';
 import 'package:finalyearproject/pages/logInPage.dart';
