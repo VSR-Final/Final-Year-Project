@@ -85,7 +85,7 @@ class _LandingPageState extends State<LandingPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SignUp()));
+                            builder: (context) => AccountType()));
                   },
                   style: buttonPrimay,
 

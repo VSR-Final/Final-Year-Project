@@ -21,7 +21,7 @@ class RoundedInput extends StatelessWidget {
             hintText: text!,
             border: InputBorder.none
         ),
-        obscureText: true,
+        obscureText: obscure,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter a ' + text;
