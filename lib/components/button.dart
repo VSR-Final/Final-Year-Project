@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget {
-  const Button({Key? key}) : super(key: key);
+final ButtonStyle buttonPrimay = ElevatedButton.styleFrom(
+  minimumSize: Size(327, 50),
+  maximumSize: Size(370, 70),
+  backgroundColor: Colors.deepPurpleAccent,
+  elevation: 0,
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(50),
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        padding: const EdgeInsets.all(25),
-        margin: const EdgeInsets.symmetric(horizontal: 25),
-        decoration: BoxDecoration(
-            color: Colors.blue, borderRadius: BorderRadius.circular(30)),
-        child: const Center(
-          child: Text(
-            'Login In',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
-}
+    ),
+  )
+);
+
