@@ -87,7 +87,7 @@ class _SignUpState extends State<SignUp> {
                           RoundedInput(size: size, icon: Icon(Icons.email, color: Colors.deepPurpleAccent.shade400), text: 'Email', controller: _emailController, type: TextInputType.emailAddress, obscure: false,),
                           RoundedInput(size: size, icon: Icon(Icons.password, color: Colors.deepPurpleAccent.shade400), text: 'Password', controller: _passwordController, type: TextInputType.text, obscure: true,),
                           RoundedInput(size: size, icon: Icon(Icons.phone, color: Colors.deepPurpleAccent.shade400), text: 'Phone Number', controller: _phoneController, type: TextInputType.phone, obscure: false),
-                          RoundedInput(size: size, icon: Icon(Icons.calendar_month, color: Colors.deepPurpleAccent.shade400), text: 'Date of Birth', controller: _dobController, type: TextInputType.datetime, obscure: false),
+                          RoundedInput(size: size, icon: Icon(Icons.calendar_month, color: Colors.deepPurpleAccent.shade400), text: 'Date of Birth(MM/DD/YYYY)', controller: _dobController, type: TextInputType.datetime, obscure: false),
 
                           SizedBox(height: 10,),
                           ElevatedButton(

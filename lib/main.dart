@@ -1,6 +1,7 @@
 import 'package:finalyearproject/pages/account_type.dart';
 import 'package:finalyearproject/pages/landing_page.dart';
 import 'package:finalyearproject/pages/patientHomePage.dart';
+import 'package:finalyearproject/pages/patient_home.dart';
 import 'package:finalyearproject/pages/physioHomePage.dart';
 import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:finalyearproject/pages/logInPage.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LandingPage(),
+      home: PatientHome(),
     );
   }
 }

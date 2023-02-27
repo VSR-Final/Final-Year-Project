@@ -15,13 +15,13 @@ class RoundedInput extends StatelessWidget {
       child: TextFormField(
         controller: controller!,
         cursorColor: Colors.deepPurpleAccent,
-        keyboardType: type,
         decoration: InputDecoration(
             icon: icon!,
             hintText: text!,
             border: InputBorder.none
         ),
-        obscureText: obscure,
+        keyboardType: type!,
+        obscureText: obscure!,
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter a ' + text;
