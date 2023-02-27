@@ -1,4 +1,4 @@
-import 'package:finalyearproject/pages/patientHomePage.dart';
+import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:finalyearproject/pages/physioHomePage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -7,60 +7,56 @@ import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
 import 'package:table_calendar/table_calendar.dart';
 
 class PatientsList extends StatefulWidget {
-  const PatientsList ({Key? key}) : super(key: key);
+  const PatientsList({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<PatientsList>  {
+class _HomePageState extends State<PatientsList> {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
   Query dbpatientRef = FirebaseDatabase.instance.ref().child('Users');
 
   Widget listPatients({required Map patients}) {
     return Container(
-
-      child:ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PhysioHomePage()));
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white70,
-        fixedSize: Size(400, 50),
-
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => PhysioHomePage()));
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white70,
+          fixedSize: Size(400, 50),
+        ),
+        child: Center(
+          child: Text(
+            capitalize(patients['name']),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black,
+            ),
+          ),
+        ),
       ),
-
-      child: Center(child: Text(
-        capitalize(patients['name']),
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-          color: Colors.black,
-        ),),
-      ),
-    ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-    height: double.infinity,
-    child: FirebaseAnimatedList(
-      query: dbpatientRef,
-      itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index){
+      height: double.infinity,
+      child: FirebaseAnimatedList(
+        query: dbpatientRef,
+        itemBuilder: (BuildContext context, DataSnapshot snapshot,
+            Animation<double> animation, int index) {
+          Map patients = snapshot.value as Map;
+          patients['key'] = snapshot.key;
 
-      Map patients = snapshot.value as Map;
-      patients['key'] = snapshot.key;
-
-      return listPatients(patients: patients);
-       },
-    ),
-
-);;
-
+          return listPatients(patients: patients);
+        },
+      ),
+    );
+    ;
   }
 }

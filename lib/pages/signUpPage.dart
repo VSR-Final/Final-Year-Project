@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:finalyearproject/pages/patientHomePage.dart';
+import 'package:finalyearproject/pages/patient_menu.dart';
+import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -159,7 +160,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PatientHomePage()));
+                                builder: (context) => PatientMenu()));
                       });
                     }
                   },

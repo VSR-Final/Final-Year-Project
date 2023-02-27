@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:finalyearproject/pages/patientHomePage.dart';
+import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:finalyearproject/pages/physioHomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -119,7 +119,6 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                     return null;
                   },
                 ),
-
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: _pickImage,
@@ -133,8 +132,6 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                     width: 200.0,
                   ),
                 ],
-
-
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(

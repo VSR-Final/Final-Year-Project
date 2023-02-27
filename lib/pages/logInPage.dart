@@ -1,4 +1,5 @@
-import 'package:finalyearproject/pages/patientHomePage.dart';
+import 'package:finalyearproject/pages/patient_menu.dart';
+import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -45,10 +46,8 @@ class LoginPage extends StatelessWidget {
                         email: _emailController.text,
                         password: _passwordController.text)
                     .then((value) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PatientHomePage()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => PatientMenu()));
                 });
               },
               child: Text('Login'),

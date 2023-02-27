@@ -1,10 +1,11 @@
 import 'package:finalyearproject/components/button.dart';
 import 'package:finalyearproject/components/glassmorphic_container.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
+import 'package:finalyearproject/pages/patient_menu.dart';
 import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:finalyearproject/pages/signup_page.dart';
 import 'package:flutter/material.dart';
-import 'package:finalyearproject/pages/patientHomePage.dart';
+import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
@@ -46,55 +47,75 @@ class _LoginState extends State<Login> {
                   child: Container(
                     width: size.width,
                     height: defaultLoginSize,
-
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
-
                       children: [
                         Text(
                           "Welcome Back",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
-
                           ),
                         ),
-
-                        SizedBox(height: 40,),
-
-                        Image(image: AssetImage('assets/logo.png'),
-                              width: 300,
-                              height: 300,
+                        SizedBox(
+                          height: 40,
                         ),
-
-                        SizedBox(height: 40,),
-
-                        RoundedInput(size: size, icon: Icon(Icons.email, color: Colors.deepPurpleAccent.shade400), text: 'Email', controller: _emailController, type: TextInputType.emailAddress, obscure: false,),
-                        RoundedInput(size: size, icon: Icon(Icons.password, color: Colors.deepPurpleAccent.shade400), text: 'Password', controller: _passwordController, type: TextInputType.text, obscure: true,),
-                        SizedBox(height: 10,),
+                        Image(
+                          image: AssetImage('assets/logo.png'),
+                          width: 300,
+                          height: 300,
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        RoundedInput(
+                          size: size,
+                          icon: Icon(Icons.email,
+                              color: Colors.deepPurpleAccent.shade400),
+                          text: 'Email',
+                          controller: _emailController,
+                          type: TextInputType.emailAddress,
+                          obscure: false,
+                        ),
+                        RoundedInput(
+                          size: size,
+                          icon: Icon(Icons.password,
+                              color: Colors.deepPurpleAccent.shade400),
+                          text: 'Password',
+                          controller: _passwordController,
+                          type: TextInputType.text,
+                          obscure: true,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         ElevatedButton(
                           style: buttonPrimay,
                           onPressed: () {
                             FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
-                                email: _emailController.text,
-                                password: _passwordController.text)
+                                    email: _emailController.text,
+                                    password: _passwordController.text)
                                 .then((value) {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PatientHomePage()));
+                                      builder: (context) => PatientMenu()));
                             });
                           },
-                          child: Text('Login',
+                          child: Text(
+                            'Login',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Colors.white,
-                            ),),
+                            ),
+                          ),
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.push(
@@ -107,30 +128,32 @@ class _LoginState extends State<Login> {
                               backgroundColor: Colors.deepPurpleAccent,
                               elevation: 0,
                               shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(50),
-
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(50),
                                 ),
-                              )
-                          ),
-
-                          child: const Center(child: Text(
-                            'SignUp',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.white,
+                              )),
+                          child: const Center(
+                            child: Text(
+                              'SignUp',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                          ),
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         TextButton(
                           onPressed: () {
                             // Navigate to forgot password page
                           },
-                          child: Text('Forgot password',
-                          style: TextStyle(color: Colors.blue),),
-
+                          child: Text(
+                            'Forgot password',
+                            style: TextStyle(color: Colors.blue),
+                          ),
                         ),
                       ],
                     ),
@@ -144,4 +167,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-

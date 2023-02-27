@@ -2,9 +2,10 @@ import 'package:finalyearproject/components/button.dart';
 import 'package:finalyearproject/components/glassmorphic_container.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
 import 'package:finalyearproject/pages/login_page.dart';
+import 'package:finalyearproject/pages/patient_menu.dart';
 import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:flutter/material.dart';
-import 'package:finalyearproject/pages/patientHomePage.dart';
+import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:finalyearproject/models/users.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +17,7 @@ class SignUp extends StatefulWidget {
   @override
   State<SignUp> createState() => _SignUpState();
 }
+
 final referenceDatabase = FirebaseDatabase.instance.ref();
 
 class _SignUpState extends State<SignUp> {
@@ -34,7 +36,7 @@ class _SignUpState extends State<SignUp> {
       image = pickedFile;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -42,7 +44,6 @@ class _SignUpState extends State<SignUp> {
     double viewInset = MediaQuery.of(context).viewInsets.bottom;
     double defaultLoginSize = size.height - (size.height * 0.2);
     double defaultRegisterSize = size.height - (size.height * 0.1);
-
 
     return Scaffold(
       body: Container(
@@ -64,40 +65,78 @@ class _SignUpState extends State<SignUp> {
                   child: Container(
                     width: size.width,
                     height: defaultLoginSize,
-
                     child: Form(
                       key: formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-
                         children: [
                           Text(
                             "Sign Up",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 24,
-
                             ),
                           ),
-
-                          SizedBox(height: 10,),
-                          
-                          RoundedInput(size: size, icon: Icon(Icons.person, color: Colors.deepPurpleAccent.shade400,), text: 'Name', controller: _nameController, type: TextInputType.text, obscure: false,),
-                          RoundedInput(size: size, icon: Icon(Icons.email, color: Colors.deepPurpleAccent.shade400), text: 'Email', controller: _emailController, type: TextInputType.emailAddress, obscure: false,),
-                          RoundedInput(size: size, icon: Icon(Icons.password, color: Colors.deepPurpleAccent.shade400), text: 'Password', controller: _passwordController, type: TextInputType.text, obscure: true,),
-                          RoundedInput(size: size, icon: Icon(Icons.phone, color: Colors.deepPurpleAccent.shade400), text: 'Phone Number', controller: _phoneController, type: TextInputType.phone, obscure: false),
-                          RoundedInput(size: size, icon: Icon(Icons.calendar_month, color: Colors.deepPurpleAccent.shade400), text: 'Date of Birth(MM/DD/YYYY)', controller: _dobController, type: TextInputType.datetime, obscure: false),
-
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          RoundedInput(
+                            size: size,
+                            icon: Icon(
+                              Icons.person,
+                              color: Colors.deepPurpleAccent.shade400,
+                            ),
+                            text: 'Name',
+                            controller: _nameController,
+                            type: TextInputType.text,
+                            obscure: false,
+                          ),
+                          RoundedInput(
+                            size: size,
+                            icon: Icon(Icons.email,
+                                color: Colors.deepPurpleAccent.shade400),
+                            text: 'Email',
+                            controller: _emailController,
+                            type: TextInputType.emailAddress,
+                            obscure: false,
+                          ),
+                          RoundedInput(
+                            size: size,
+                            icon: Icon(Icons.password,
+                                color: Colors.deepPurpleAccent.shade400),
+                            text: 'Password',
+                            controller: _passwordController,
+                            type: TextInputType.text,
+                            obscure: true,
+                          ),
+                          RoundedInput(
+                              size: size,
+                              icon: Icon(Icons.phone,
+                                  color: Colors.deepPurpleAccent.shade400),
+                              text: 'Phone Number',
+                              controller: _phoneController,
+                              type: TextInputType.phone,
+                              obscure: false),
+                          RoundedInput(
+                              size: size,
+                              icon: Icon(Icons.calendar_month,
+                                  color: Colors.deepPurpleAccent.shade400),
+                              text: 'Date of Birth(MM/DD/YYYY)',
+                              controller: _dobController,
+                              type: TextInputType.datetime,
+                              obscure: false),
+                          SizedBox(
+                            height: 10,
+                          ),
                           ElevatedButton(
                             style: buttonPrimay,
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 FirebaseAuth.instance
                                     .createUserWithEmailAndPassword(
-                                    email: _emailController.text,
-                                    password: _passwordController.text)
+                                        email: _emailController.text,
+                                        password: _passwordController.text)
                                     .then((value) {
                                   Users user1 = Users(
                                     name: _nameController.text,
@@ -106,23 +145,27 @@ class _SignUpState extends State<SignUp> {
                                     dob: _dobController.text,
                                   );
                                   DatabaseReference newUserRef =
-                                  referenceDatabase.child('Users');
+                                      referenceDatabase.child('Users');
                                   newUserRef.push().set(user1.toJson());
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => PatientHomePage()));
+                                          builder: (context) => PatientMenu()));
                                 });
                               }
                             },
-                            child: Text('Sign Up',
+                            child: Text(
+                              'Sign Up',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                                 color: Colors.white,
-                              ),),
+                              ),
+                            ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           ElevatedButton(
                             onPressed: () {
                               Navigator.push(
@@ -135,23 +178,21 @@ class _SignUpState extends State<SignUp> {
                                 backgroundColor: Colors.deepPurpleAccent,
                                 elevation: 0,
                                 shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(50),
-
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(50),
                                   ),
-                                )
-                            ),
-
-                            child: const Center(child: Text(
-                              'Login',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.white,
+                                )),
+                            child: const Center(
+                              child: Text(
+                                'Login',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                            ),
                           ),
-
                         ],
                       ),
                     ),
@@ -165,4 +206,3 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
-
