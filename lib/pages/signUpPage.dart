@@ -1,16 +1,20 @@
 import 'dart:io';
 
 import 'package:finalyearproject/pages/patientHomePage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+import 'package:finalyearproject/models/users.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
-
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
+
+final referenceDatabase = FirebaseDatabase.instance.ref();
 
 class _SignUpPageState extends State<SignUpPage> {
   final formKey = GlobalKey<FormState>();
@@ -143,6 +147,15 @@ class _SignUpPageState extends State<SignUpPage> {
                               email: _emailController.text,
                               password: _passwordController.text)
                           .then((value) {
+                        Users user1 = Users(
+                          name: _nameController.text,
+                          email: _emailController.text,
+                          phone: _phoneController.text,
+                          dob: _dobController.text,
+                        );
+                        DatabaseReference newUserRef =
+                            referenceDatabase.child('Users');
+                        newUserRef.push().set(user1.toJson());
                         Navigator.push(
                             context,
                             MaterialPageRoute(
