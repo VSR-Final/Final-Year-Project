@@ -1,6 +1,9 @@
 import 'package:finalyearproject/components/SignUp.dart';
 import 'package:finalyearproject/components/SupportButton.dart';
 import 'package:finalyearproject/components/button.dart';
+import 'package:finalyearproject/pages/logInPage.dart';
+import 'package:finalyearproject/pages/physiotherapist_signUpPage.dart';
+import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:flutter/material.dart';
 
 class AccountType extends StatelessWidget{
@@ -39,16 +42,23 @@ class AccountType extends StatelessWidget{
                       ),
                     ),
 
-                    const SizedBox(height: 100,),
+                    const SizedBox(height: 50,),
 
-                    Container(
-                      padding: const EdgeInsets.all(25),
-                      margin: const EdgeInsets.symmetric(horizontal: 25),
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(30)),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUpPage()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        fixedSize: Size(400, 50),
+
+                      ),
+
                       child: const Center(child: Text(
-                        'Physiotherapist',
+                        'Patient',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -57,14 +67,21 @@ class AccountType extends StatelessWidget{
                       ),
                     ),
                     const SizedBox(height: 20,),
-                    Container(
-                      padding: const EdgeInsets.all(25),
-                      margin: const EdgeInsets.symmetric(horizontal: 25),
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(30)),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PhysioSignUpPage()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        fixedSize: Size(400, 50),
+
+                      ),
+
                       child: const Center(child: Text(
-                        'Patient',
+                        'Physiotherapist',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,

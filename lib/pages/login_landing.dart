@@ -1,3 +1,4 @@
+import 'package:finalyearproject/pages/account_type.dart';
 import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:finalyearproject/pages/logInPage.dart';
 import 'package:finalyearproject/components/SupportButton.dart';
@@ -38,7 +39,7 @@ class LoginLanding extends StatelessWidget{
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SignUpPage()));
+                          builder: (context) => AccountType()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,

@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -9,12 +11,16 @@ class PatientHomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<PatientHomePage> {
+
+  Query dbpatientRef = FirebaseDatabase.instance.ref().child('Users');
+
   DateTime today = DateTime.now();
   Map<DateTime, List<dynamic>> _events = {
     DateTime(2022, 3, 1): ['Event A', 'Event B'],
     DateTime(2022, 3, 5): ['Event C'],
     DateTime(2022, 3, 13): ['Event D', 'Event E'],
   };
+
 
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
@@ -44,6 +50,7 @@ class _HomePageState extends State<PatientHomePage> {
               title: Text('Patients'),
               onTap: () {
                 // TODO: Handle menu item selection
+
               },
             ),
             ListTile(
