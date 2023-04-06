@@ -1,5 +1,4 @@
 import 'package:finalyearproject/pages/account_type.dart';
-import 'package:finalyearproject/pages/logInPage.dart';
 import 'package:finalyearproject/pages/login_page.dart';
 import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:finalyearproject/pages/signup_page.dart';
@@ -35,7 +34,9 @@ class _LandingPageState extends State<LandingPage> {
               width: size.width,
               height: size.height,
               child: Column(children: [
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Container(
                   height: 400,
                   width: 400,
@@ -48,13 +49,15 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 SizedBox(height: 24),
                 Text('Welcome!',
-                style: GoogleFonts.roboto(
-                  fontSize: 56,
-                  fontWeight: FontWeight.bold,
-                )
+                    style: GoogleFonts.roboto(
+                      fontSize: 56,
+                      fontWeight: FontWeight.bold,
+                    )),
+                SizedBox(
+                  height: 10,
                 ),
-                SizedBox(height: 10,),
-                Text('Choose an option',
+                Text(
+                  'Choose an option',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -63,71 +66,70 @@ class _LandingPageState extends State<LandingPage> {
                 SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Login()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Login()));
                   },
                   style: buttonPrimay,
-
-                  child: const Center(child: Text(
-                    'Login',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),),
+                  child: const Center(
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AccountType()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AccountType()));
                   },
                   style: buttonPrimay,
-
-                  child: const Center(child: Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),),
+                  child: const Center(
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SignUpPage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignUpPage()));
                   },
                   style: ElevatedButton.styleFrom(
                       maximumSize: Size(200, 40),
                       backgroundColor: Colors.deepPurpleAccent,
                       elevation: 0,
                       shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50),
-
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50),
                         ),
-                      )
-                  ),
-
-                  child: const Center(child: Text(
-                    'Support',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),),
+                      )),
+                  child: const Center(
+                    child: Text(
+                      'Support',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
-              ]
-              ),
+              ]),
             ),
           ),
         ),
@@ -135,5 +137,3 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 }
-
- 

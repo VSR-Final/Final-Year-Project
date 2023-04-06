@@ -4,9 +4,12 @@ import 'package:finalyearproject/components/rounded_input.dart';
 import 'package:finalyearproject/pages/patient_menu.dart';
 import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:finalyearproject/pages/signup_page.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../models/users.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -26,6 +29,23 @@ class _LoginState extends State<Login> {
 
     final TextEditingController _passwordController = TextEditingController();
     final TextEditingController _emailController = TextEditingController();
+    final databaseRef = FirebaseDatabase.instance.reference();
+
+    Future<Users?> getUser(String email) async {
+      final event = await databaseRef.child('users').child(email).once();
+      final data = event.snapshot.value as Map<String, dynamic>;
+      ;
+      if (data == null) {
+        return null; // or throw an error, depending on your requirements
+      }
+      return Users(
+        uid: data['uid'],
+        name: data['name'],
+        email: data['email'],
+        phone: data['phone'],
+        dob: data['dob'],
+      );
+    }
 
     return Scaffold(
       body: Container(
@@ -98,10 +118,13 @@ class _LoginState extends State<Login> {
                                     email: _emailController.text,
                                     password: _passwordController.text)
                                 .then((value) {
+                              Users users1 =
+                                  getUser(_emailController.text) as Users;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PatientMenu()));
+                                      builder: (context) =>
+                                          PatientMenu(users1)));
                             });
                           },
                           child: Text(

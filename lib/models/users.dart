@@ -1,22 +1,22 @@
 import 'package:uuid/uuid.dart';
 
 class Users {
-  final String id;
+  final String uid;
   final String name;
   final String email;
   final String phone;
   final String dob;
 
   Users({
-    String? id,
+    String? uid,
     required this.name,
     required this.email,
     required this.phone,
     required this.dob,
-  }) : id = id ?? Uuid().v4();
+  }) : uid = uid ?? Uuid().v4();
 
   Users.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
+      : uid = json['id'],
         name = json['name'],
         email = json['email'],
         phone = json['phone'],

@@ -1,20 +1,31 @@
 import 'package:finalyearproject/components/excercise_tile.dart';
 import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:finalyearproject/pages/patient_home.dart';
-
+import 'package:finalyearproject/pages/search_user.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../models/users.dart';
+
 class PatientMenu extends StatefulWidget {
-  const PatientMenu({Key? key}) : super(key: key);
+  final Users user;
+  const PatientMenu(this.user);
 
   @override
   State<PatientMenu> createState() => _PatientMenuState();
 }
 
 class _PatientMenuState extends State<PatientMenu> {
-  List pages = [PatientHome(), PatientSchedule()];
+  List<Widget> pages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    pages = [PatientHome(), PatientSchedule(), SearchScreen(widget.user)];
+  }
+
   int currentIndex = 0;
+
   void onTap(int index) {
     setState(() {
       currentIndex = index;

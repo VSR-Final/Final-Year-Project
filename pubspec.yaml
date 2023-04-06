@@ -44,6 +44,10 @@ dependencies:
   uuid: ^3.0.7
   google_fonts:
   glassmorphism: ^3.0.0
+  firebase_messaging: ^14.3.0
+  shared_preferences: ^2.0.18
+  flutter_local_notifications: ^8.2.0
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:
