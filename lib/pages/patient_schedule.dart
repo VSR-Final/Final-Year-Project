@@ -1,3 +1,5 @@
+import 'package:finalyearproject/components/CalendarWidget.dart';
+import 'package:finalyearproject/components/EventEditingPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -32,15 +34,13 @@ class _PatientScheduleState extends State<PatientSchedule> {
       appBar: AppBar(
         title: Text('Schedule'),
       ),
-      body: TableCalendar(
-        locale: "en_US",
-        rowHeight: 43,
-        availableGestures: AvailableGestures.all,
-        selectedDayPredicate: (day) => isSameDay(day, today),
-        focusedDay: today,
-        firstDay: DateTime.utc(2018, 10, 16),
-        lastDay: DateTime.utc(2038, 3, 14),
-        onDaySelected: _onDaySelected,
+      body: CalendarWidget(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add, color: Colors.white,),
+        backgroundColor: Colors.red,
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => EventEditingPage())
+        ),
       ),
     );
   }

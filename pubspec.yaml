@@ -43,11 +43,13 @@ dependencies:
   firebase_database: ^10.0.14
   uuid: ^3.0.7
   google_fonts:
+  cloud_firestore:
   glassmorphism: ^3.0.0
   firebase_messaging: ^14.3.0
   shared_preferences: ^2.0.18
-  flutter_local_notifications: ^8.2.0
+  flutter_local_notifications: ^13.0.0
   cached_network_image: ^3.2.3
+  syncfusion_flutter_calendar: ^21.1.38
 
 dev_dependencies:
   flutter_test:

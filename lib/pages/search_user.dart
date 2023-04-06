@@ -25,7 +25,7 @@ class _SearchScreenState extends State<SearchScreen> {
       isLoading = true;
     });
 
-    final databaseRef = FirebaseDatabase.instance.reference().child('users');
+    final databaseRef = FirebaseDatabase.instance.ref().child('users');
     databaseRef
         .orderByChild('name')
         .equalTo(searchController.text)

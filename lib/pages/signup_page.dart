@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:finalyearproject/models/users.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class SignUp extends StatefulWidget {
   State<SignUp> createState() => _SignUpState();
 }
 
-final referenceDatabase = FirebaseDatabase.instance.ref();
+CollectionReference users = FirebaseFirestore.instance.collection('users');
 
 class _SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
@@ -144,9 +145,12 @@ class _SignUpState extends State<SignUp> {
                                     phone: _phoneController.text,
                                     dob: _dobController.text,
                                   );
-                                  DatabaseReference newUserRef =
-                                      referenceDatabase.child('Users');
-                                  newUserRef.push().set(user1.toJson());
+                                  users.add({
+                                    'name': _nameController.text,
+                                    'email': _emailController.text,
+                                    'phone': _phoneController.text,
+                                    'dob': _dobController.text,
+                                  });
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

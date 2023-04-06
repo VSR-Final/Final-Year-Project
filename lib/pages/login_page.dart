@@ -29,10 +29,10 @@ class _LoginState extends State<Login> {
 
     final TextEditingController _passwordController = TextEditingController();
     final TextEditingController _emailController = TextEditingController();
-    final databaseRef = FirebaseDatabase.instance.reference();
+    final databaseRef = FirebaseDatabase.instance.ref();
 
     Future<Users?> getUser(String email) async {
-      final event = await databaseRef.child('users').child(email).once();
+      final event = await databaseRef.child('users').orderByChild('email').equalTo(email).once();
       final data = event.snapshot.value as Map<String, dynamic>;
       ;
       if (data == null) {
@@ -113,7 +113,7 @@ class _LoginState extends State<Login> {
                         ElevatedButton(
                           style: buttonPrimay,
                           onPressed: () {
-                            FirebaseAuth.instance
+                             FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                                     email: _emailController.text,
                                     password: _passwordController.text)
