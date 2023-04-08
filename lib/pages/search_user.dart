@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:finalyearproject/pages/chat_page.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -84,9 +85,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        leading: CircleAvatar(
-                          child: Image.network(searchResult[index]['image']),
-                        ),
+                        // leading: CircleAvatar(
+                        //   child: Image.network(searchResult[index]['image']),
+                        // ),
                         title: Text(searchResult[index]['name']),
                         subtitle: Text(searchResult[index]['email']),
                         trailing: IconButton(

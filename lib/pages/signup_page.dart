@@ -11,6 +11,7 @@ import 'package:finalyearproject/models/users.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -139,13 +140,19 @@ class _SignUpState extends State<SignUp> {
                                         email: _emailController.text,
                                         password: _passwordController.text)
                                     .then((value) {
+                                      var random = new Random();
+                                      var uid = random.nextInt(900000) + 100000;
+
+
                                   Users user1 = Users(
+                                    uid: uid.toString(),
                                     name: _nameController.text,
                                     email: _emailController.text,
                                     phone: _phoneController.text,
                                     dob: _dobController.text,
                                   );
                                   users.add({
+                                    'uid': uid.toString(),
                                     'name': _nameController.text,
                                     'email': _emailController.text,
                                     'phone': _phoneController.text,

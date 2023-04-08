@@ -13,6 +13,7 @@ class MessageTextField extends StatefulWidget {
 
 class _MessageTextFieldState extends State<MessageTextField> {
   TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,6 +24,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
           Expanded(
               child: TextField(
             controller: _controller,
+            keyboardType: TextInputType.text,
             decoration: InputDecoration(
                 labelText: "Type your Message",
                 fillColor: Colors.grey[100],
@@ -52,7 +54,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                 "receiverId": widget.friendId,
                 "message": message,
                 "type": "text",
-                "date": DateTime.now(),
+                "date": DateTime.now().toString(),
               }).then((value) {
                 FirebaseDatabase.instance
                     .ref()
@@ -81,7 +83,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                 "receiverId": widget.friendId,
                 "message": message,
                 "type": "text",
-                "date": DateTime.now(),
+                "date": DateTime.now().toString(),
               }).then((value) {
                 FirebaseDatabase.instance
                     .ref()

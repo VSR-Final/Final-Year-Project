@@ -32,6 +32,7 @@ class _LoginState extends State<Login> {
     final databaseRef = FirebaseDatabase.instance.ref();
 
     Future<Users?> getUser(String email) async {
+      //final event = await FirebaseFirestore.instance.collection("users").where("email", isEqualTo: email).get();
       final event = await databaseRef.child('users').orderByChild('email').equalTo(email).once();
       final data = event.snapshot.value as Map<String, dynamic>;
       ;

@@ -68,7 +68,9 @@ class ChatScreen extends StatelessWidget {
                     .snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
+
                     if (snapshot.data.docs.length < 1) {
+
                       return Center(
                         child: Text("Say Hi"),
                       );
