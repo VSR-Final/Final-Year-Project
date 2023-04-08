@@ -3,7 +3,7 @@ import 'package:finalyearproject/widgets/message_textfield.dart';
 import 'package:finalyearproject/widgets/single_message.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/users.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -58,15 +58,14 @@ class ChatScreen extends StatelessWidget {
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25))),
             child: StreamBuilder(
-                stream: FirebaseDatabase.instance
-                    .ref()
-                    .child("users")
-                    .child(currentUser.uid)
-                    .child('messages')
-                    .child(friendId)
-                    .child('chats')
-                    .orderByChild("date")
-                    .onValue,
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(currentUser.uid)
+                    .collection('messages')
+                    .doc(friendId)
+                    .collection('chats')
+                    .orderBy("date", descending: true)
+                    .snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data.docs.length < 1) {
