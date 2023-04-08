@@ -10,13 +10,13 @@ class ChatScreen extends StatelessWidget {
   final Users currentUser;
   final String friendId;
   final String friendName;
-  final String friendImage;
+  //final String friendImage;
 
   ChatScreen({
     required this.currentUser,
     required this.friendId,
     required this.friendName,
-    required this.friendImage,
+    //required this.friendImage,
   });
 
   @override
@@ -26,20 +26,20 @@ class ChatScreen extends StatelessWidget {
         backgroundColor: Colors.teal,
         title: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(80),
-              child: CachedNetworkImage(
-                imageUrl: friendImage,
-                placeholder: (conteext, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.error,
-                ),
-                height: 40,
-              ),
-            ),
-            SizedBox(
-              width: 5,
-            ),
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(80),
+            //   child: CachedNetworkImage(
+            //     imageUrl: friendImage,
+            //     placeholder: (conteext, url) => CircularProgressIndicator(),
+            //     errorWidget: (context, url, error) => Icon(
+            //       Icons.error,
+            //     ),
+            //     height: 40,
+            //   ),
+            // ),
+            // SizedBox(
+            //   width: 5,
+            // ),
             Text(
               friendName,
               style: TextStyle(fontSize: 20),
