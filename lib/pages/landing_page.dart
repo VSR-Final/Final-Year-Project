@@ -1,6 +1,5 @@
 import 'package:finalyearproject/pages/account_type.dart';
 import 'package:finalyearproject/pages/login_page.dart';
-import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:finalyearproject/pages/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:finalyearproject/components/button.dart';
@@ -107,7 +106,7 @@ class _LandingPageState extends State<LandingPage> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                        MaterialPageRoute(builder: (context) => SignUp()));
                   },
                   style: ElevatedButton.styleFrom(
                       maximumSize: Size(200, 40),

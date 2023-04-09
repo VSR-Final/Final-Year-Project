@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:finalyearproject/licenseStorage.dart';
 import 'package:finalyearproject/pages/patient_schedule.dart';
-import 'package:finalyearproject/pages/physioHomePage.dart';
+import 'package:finalyearproject/pages/physio_home.dart';
+import 'package:finalyearproject/pages/physiotherapist_menu.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:math';
 import 'package:finalyearproject/models/users.dart';
 
 class PhysioSignUpPage extends StatefulWidget {
@@ -15,7 +18,7 @@ class PhysioSignUpPage extends StatefulWidget {
   _PhysioSignUpPageState createState() => _PhysioSignUpPageState();
 }
 
-final referenceDatabase = FirebaseDatabase.instance.ref();
+FirebaseFirestore collection = FirebaseFirestore.instance;
 
 class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
   final formKey = GlobalKey<FormState>();
@@ -24,14 +27,33 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  XFile? image;
+  String? path;
+  String? fileName;
 
   Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final LicenseStorage storage = LicenseStorage();
+    final pickedFile = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg'],
+    );
+
+    if (pickedFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No file selected.'),
+        ), // SnackBar
+      );
+
+      return null;
+    }
+
     setState(() {
-      image = pickedFile;
+      path = pickedFile.files.single.path!;
+      fileName = pickedFile.files.single.name;
     });
+
+    storage.uploadFile(path!, fileName!);
   }
 
   @override
@@ -124,14 +146,14 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                   onPressed: _pickImage,
                   child: Text('Submit Physiotherapist License'),
                 ),
-                if (image != null) ...[
-                  SizedBox(height: 16.0),
-                  Image.file(
-                    File(image!.path),
-                    height: 200.0,
-                    width: 200.0,
-                  ),
-                ],
+                // if (image != null) ...[
+                //   SizedBox(height: 16.0),
+                //   Image.file(
+                //     File(image!.path),
+                //     height: 200.0,
+                //     width: 200.0,
+                //   ),
+                // ],
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -145,19 +167,32 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                               email: _emailController.text,
                               password: _passwordController.text)
                           .then((value) {
+                        var random = new Random();
+                        var uid = random.nextInt(900000) + 100000;
+
                         Users user1 = Users(
+                          uid: uid.toString(),
                           name: _nameController.text,
                           email: _emailController.text,
                           phone: _phoneController.text,
                           dob: _dobController.text,
+                          userType: 'Physiotherapist',
+                          license: fileName!,
                         );
-                        DatabaseReference newUserRef =
-                            referenceDatabase.child('Users');
-                        newUserRef.push().set(user1.toJson());
+                        collection.collection('users').doc(uid.toString()).set({
+                          'uid': uid.toString(),
+                          'name': _nameController.text,
+                          'email': _emailController.text,
+                          'phone': _phoneController.text,
+                          'dob': _dobController.text,
+                          'userType': 'Physiotherapist',
+                          'license': fileName!,
+                        });
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PhysioHomePage()));
+                                builder: (context) =>
+                                    PhysiotherapistMenu(user1)));
                       });
                     }
                   },

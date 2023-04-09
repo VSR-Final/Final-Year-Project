@@ -3,7 +3,6 @@ import 'package:finalyearproject/components/glassmorphic_container.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
 import 'package:finalyearproject/pages/login_page.dart';
 import 'package:finalyearproject/pages/patient_menu.dart';
-import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:flutter/material.dart';
 import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,7 +19,7 @@ class SignUp extends StatefulWidget {
   State<SignUp> createState() => _SignUpState();
 }
 
- FirebaseFirestore collection = FirebaseFirestore.instance;
+FirebaseFirestore collection = FirebaseFirestore.instance;
 
 class _SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
@@ -140,23 +139,26 @@ class _SignUpState extends State<SignUp> {
                                         email: _emailController.text,
                                         password: _passwordController.text)
                                     .then((value) {
-                                      var random = new Random();
-                                      var uid = random.nextInt(900000) + 100000;
-
+                                  var random = new Random();
+                                  var uid = random.nextInt(900000) + 100000;
 
                                   Users user1 = Users(
-                                    uid: uid.toString(),
-                                    name: _nameController.text,
-                                    email: _emailController.text,
-                                    phone: _phoneController.text,
-                                    dob: _dobController.text,
-                                  );
-                                  collection.collection('users').doc(uid.toString()).set({
+                                      uid: uid.toString(),
+                                      name: _nameController.text,
+                                      email: _emailController.text,
+                                      phone: _phoneController.text,
+                                      dob: _dobController.text,
+                                      userType: 'Patient');
+                                  collection
+                                      .collection('users')
+                                      .doc(uid.toString())
+                                      .set({
                                     'uid': uid.toString(),
                                     'name': _nameController.text,
                                     'email': _emailController.text,
                                     'phone': _phoneController.text,
                                     'dob': _dobController.text,
+                                    'userType': 'Patient',
                                   });
                                   Navigator.push(
                                       context,

@@ -1,8 +1,6 @@
 import 'package:finalyearproject/components/SupportButton.dart';
 import 'package:finalyearproject/components/button.dart';
-import 'package:finalyearproject/pages/physiosignup.dart';
 import 'package:finalyearproject/pages/physiotherapist_signUpPage.dart';
-import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:finalyearproject/components/glassmorphic_container.dart';
 import 'package:finalyearproject/pages/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +87,7 @@ class AccountType extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PhysioSignUp()));
+                            builder: (context) => PhysioSignUpPage()));
                   },
                   style: buttonPrimay,
                   child: const Center(

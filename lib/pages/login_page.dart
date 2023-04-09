@@ -3,7 +3,6 @@ import 'package:finalyearproject/components/button.dart';
 import 'package:finalyearproject/components/glassmorphic_container.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
 import 'package:finalyearproject/pages/patient_menu.dart';
-import 'package:finalyearproject/pages/signUpPage.dart';
 import 'package:finalyearproject/pages/signup_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +34,11 @@ class _LoginState extends State<Login> {
     Future<Users?> getUser(String email) async {
       List<Map> searchResult = [];
       //final event = await FirebaseFirestore.instance.collection("users").where("email", isEqualTo: email).get();
-      final data = await databaseRef.collection('users').where('email', isEqualTo: email).get().then((value) {
+      final data = await databaseRef
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get()
+          .then((value) {
         if (value.docs.length < 1) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("No User Found")));
@@ -43,24 +46,21 @@ class _LoginState extends State<Login> {
         }
 
         value.docs.forEach((user) {
-            searchResult.add(user.data());
+          searchResult.add(user.data());
         });
 
         Users user1 = Users(
-        uid: searchResult[0]['uid'],
-        name: searchResult[0]['name'],
-        email: searchResult[0]['email'],
-        phone: searchResult[0]['phone'],
-        dob: searchResult[0]['dob'],
-      );
+          uid: searchResult[0]['uid'],
+          name: searchResult[0]['name'],
+          email: searchResult[0]['email'],
+          phone: searchResult[0]['phone'],
+          dob: searchResult[0]['dob'],
+          userType: searchResult[0]['userType'],
+        );
 
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    PatientMenu(user1)));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => PatientMenu(user1)));
       });
-
     }
 
     return Scaffold(
@@ -129,7 +129,7 @@ class _LoginState extends State<Login> {
                         ElevatedButton(
                           style: buttonPrimay,
                           onPressed: () {
-                             FirebaseAuth.instance
+                            FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                                     email: _emailController.text,
                                     password: _passwordController.text)

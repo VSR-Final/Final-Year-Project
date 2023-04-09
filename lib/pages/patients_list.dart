@@ -1,5 +1,5 @@
 import 'package:finalyearproject/pages/patient_schedule.dart';
-import 'package:finalyearproject/pages/physioHomePage.dart';
+import 'package:finalyearproject/pages/physio_home.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
