@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/components/button.dart';
 import 'package:finalyearproject/components/glassmorphic_container.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
@@ -29,23 +30,37 @@ class _LoginState extends State<Login> {
 
     final TextEditingController _passwordController = TextEditingController();
     final TextEditingController _emailController = TextEditingController();
-    final databaseRef = FirebaseDatabase.instance.ref();
+    final databaseRef = FirebaseFirestore.instance;
 
     Future<Users?> getUser(String email) async {
+      List<Map> searchResult = [];
       //final event = await FirebaseFirestore.instance.collection("users").where("email", isEqualTo: email).get();
-      final event = await databaseRef.child('users').orderByChild('email').equalTo(email).once();
-      final data = event.snapshot.value as Map<String, dynamic>;
-      ;
-      if (data == null) {
-        return null; // or throw an error, depending on your requirements
-      }
-      return Users(
-        uid: data['uid'],
-        name: data['name'],
-        email: data['email'],
-        phone: data['phone'],
-        dob: data['dob'],
+      final data = await databaseRef.collection('users').where('email', isEqualTo: email).get().then((value) {
+        if (value.docs.length < 1) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("No User Found")));
+          return null;
+        }
+
+        value.docs.forEach((user) {
+            searchResult.add(user.data());
+        });
+
+        Users user1 = Users(
+        uid: searchResult[0]['uid'],
+        name: searchResult[0]['name'],
+        email: searchResult[0]['email'],
+        phone: searchResult[0]['phone'],
+        dob: searchResult[0]['dob'],
       );
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    PatientMenu(user1)));
+      });
+
     }
 
     return Scaffold(
@@ -119,13 +134,8 @@ class _LoginState extends State<Login> {
                                     email: _emailController.text,
                                     password: _passwordController.text)
                                 .then((value) {
-                              Users users1 =
-                                  getUser(_emailController.text) as Users;
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          PatientMenu(users1)));
+                              Future<Users?> users1 =
+                                  getUser(_emailController.text);
                             });
                           },
                           child: Text(

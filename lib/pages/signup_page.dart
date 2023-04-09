@@ -20,7 +20,7 @@ class SignUp extends StatefulWidget {
   State<SignUp> createState() => _SignUpState();
 }
 
-CollectionReference users = FirebaseFirestore.instance.collection('users');
+ FirebaseFirestore collection = FirebaseFirestore.instance;
 
 class _SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
@@ -151,7 +151,7 @@ class _SignUpState extends State<SignUp> {
                                     phone: _phoneController.text,
                                     dob: _dobController.text,
                                   );
-                                  users.add({
+                                  collection.collection('users').doc(uid.toString()).set({
                                     'uid': uid.toString(),
                                     'name': _nameController.text,
                                     'email': _emailController.text,
