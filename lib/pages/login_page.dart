@@ -20,10 +20,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-   final TextEditingController _passwordController = TextEditingController();
-   final TextEditingController _emailController = TextEditingController();
-   final databaseRef = FirebaseFirestore.instance;
-
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final databaseRef = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +31,6 @@ class _LoginState extends State<Login> {
     double viewInset = MediaQuery.of(context).viewInsets.bottom;
     double defaultLoginSize = size.height - (size.height * 0.2);
     double defaultRegisterSize = size.height - (size.height * 0.1);
-
-   
 
     Future<Users?> getUser(String email) async {
       List<Map> searchResult = [];
@@ -48,12 +45,11 @@ class _LoginState extends State<Login> {
               .showSnackBar(SnackBar(content: Text("No User Found")));
           return null;
         }
-      
 
         value.docs.forEach((user) {
           searchResult.add(user.data());
         });
-          
+
         Users user1 = Users(
           uid: searchResult[0]['uid'],
           name: searchResult[0]['name'],
@@ -68,30 +64,30 @@ class _LoginState extends State<Login> {
               .showSnackBar(SnackBar(content: Text("Account still pending")));
           return null;
         } else {
-          if (searchResult[0]['userType']== 'Patient'){
-          FirebaseAuth.instance
-              .signInWithEmailAndPassword(
-                  email: _emailController.text,
-                  password: _passwordController.text)
-              .then((value) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PatientMenu(user1)));
-          });
+          if (searchResult[0]['userType'] == 'Patient') {
+            FirebaseAuth.instance
+                .signInWithEmailAndPassword(
+                    email: _emailController.text,
+                    password: _passwordController.text)
+                .then((value) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => PatientMenu(user1)));
+            });
+          } else {
+            FirebaseAuth.instance
+                .signInWithEmailAndPassword(
+                    email: _emailController.text,
+                    password: _passwordController.text)
+                .then((value) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PhysiotherapistMenu(user1)));
+            });
           }
-        else{
-          FirebaseAuth.instance
-              .signInWithEmailAndPassword(
-                  email: _emailController.text,
-                  password: _passwordController.text)
-              .then((value) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PhysiotherapistMenu(user1)));
-          });
         }
-
+      });
     }
-    
-  }
 
     return Scaffold(
       body: Container(
