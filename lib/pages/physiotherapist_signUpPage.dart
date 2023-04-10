@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:finalyearproject/licenseStorage.dart';
 import 'package:finalyearproject/pages/patient_schedule.dart';
@@ -29,7 +30,7 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  String? path;
+  Uint8List? path;
   String? fileName;
 
   Future<void> _pickImage() async {
@@ -51,7 +52,7 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
     }
 
     setState(() {
-      path = pickedFile.files.single.path!;
+      path = pickedFile.files.single.bytes!;
       fileName = pickedFile.files.single.name;
     });
 

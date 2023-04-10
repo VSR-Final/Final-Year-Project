@@ -26,6 +26,14 @@ class SignUp extends StatefulWidget {
 FirebaseFirestore collection = FirebaseFirestore.instance;
 
 class _SignUpState extends State<SignUp> {
+
+  @override
+  void initState()
+  {super.initState();
+  getPhysioList();
+  }
+
+  
   final formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -47,11 +55,13 @@ class _SignUpState extends State<SignUp> {
   }
 
   void getPhysioList() {
+    print('name');
     FirebaseFirestore.instance
-        .collection('physiotherapists')
+        .collection('physiotherapist')
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((doc) {
+        
         setState(() {
           items.add(doc.get('name'));
         });
@@ -134,6 +144,7 @@ class _SignUpState extends State<SignUp> {
         context, MaterialPageRoute(builder: (context) => LandingPage()));
   }
 
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -141,6 +152,7 @@ class _SignUpState extends State<SignUp> {
     double viewInset = MediaQuery.of(context).viewInsets.bottom;
     double defaultLoginSize = size.height - (size.height * 0.2);
     double defaultRegisterSize = size.height - (size.height * 0.1);
+    
 
     return Scaffold(
       body: Container(
@@ -223,8 +235,8 @@ class _SignUpState extends State<SignUp> {
                               controller: _dobController,
                               type: TextInputType.datetime,
                               obscure: false),
-                          DropdownButton(
-                            value: selectedItem,
+                          DropdownButton<String>(
+                            value: selectedItem.isNotEmpty ? selectedItem : null,
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedItem = newValue!;
