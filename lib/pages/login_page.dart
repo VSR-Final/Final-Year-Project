@@ -56,10 +56,22 @@ class _LoginState extends State<Login> {
           phone: searchResult[0]['phone'],
           dob: searchResult[0]['dob'],
           userType: searchResult[0]['userType'],
+          status: searchResult[0]['status'],
         );
-
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PatientMenu(user1)));
+        if (user1.status == 'pending') {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Account still pending")));
+          return null;
+        } else {
+          FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: _emailController.text,
+                  password: _passwordController.text)
+              .then((value) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PatientMenu(user1)));
+          });
+        }
       });
     }
 
@@ -129,14 +141,7 @@ class _LoginState extends State<Login> {
                         ElevatedButton(
                           style: buttonPrimay,
                           onPressed: () {
-                            FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: _emailController.text,
-                                    password: _passwordController.text)
-                                .then((value) {
-                              Future<Users?> users1 =
-                                  getUser(_emailController.text);
-                            });
+                            getUser(_emailController.text);
                           },
                           child: Text(
                             'Login',

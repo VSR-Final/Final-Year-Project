@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:finalyearproject/licenseStorage.dart';
@@ -11,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:math';
+import 'package:http/http.dart' as http;
 import 'package:finalyearproject/models/users.dart';
 
 class PhysioSignUpPage extends StatefulWidget {
@@ -171,15 +173,28 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                         var uid = random.nextInt(900000) + 100000;
 
                         Users user1 = Users(
-                          uid: uid.toString(),
-                          name: _nameController.text,
-                          email: _emailController.text,
-                          phone: _phoneController.text,
-                          dob: _dobController.text,
-                          userType: 'Physiotherapist',
-                          license: fileName!,
-                        );
+                            uid: uid.toString(),
+                            name: _nameController.text,
+                            email: _emailController.text,
+                            phone: _phoneController.text,
+                            dob: _dobController.text,
+                            userType: 'Physiotherapist',
+                            license: fileName!,
+                            status: 'Pending');
                         collection.collection('users').doc(uid.toString()).set({
+                          'uid': uid.toString(),
+                          'name': _nameController.text,
+                          'email': _emailController.text,
+                          'phone': _phoneController.text,
+                          'dob': _dobController.text,
+                          'userType': 'Physiotherapist',
+                          'license': fileName!,
+                          'status': 'Pending',
+                        });
+                        collection
+                            .collection('physiotherapist')
+                            .doc(uid.toString())
+                            .set({
                           'uid': uid.toString(),
                           'name': _nameController.text,
                           'email': _emailController.text,

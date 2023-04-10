@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:finalyearproject/components/button.dart';
 import 'package:finalyearproject/components/glassmorphic_container.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
+import 'package:finalyearproject/pages/landing_page.dart';
 import 'package:finalyearproject/pages/login_page.dart';
 import 'package:finalyearproject/pages/patient_menu.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
+import 'package:http/http.dart' as http;
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -29,6 +33,10 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   XFile? image;
+  List<String> items = [];
+  String selectedItem = '';
+  final databaseRef = FirebaseFirestore.instance;
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -36,6 +44,94 @@ class _SignUpState extends State<SignUp> {
     setState(() {
       image = pickedFile;
     });
+  }
+
+  void getPhysioList() {
+    FirebaseFirestore.instance
+        .collection('physiotherapists')
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        setState(() {
+          items.add(doc.get('name'));
+        });
+      });
+    });
+  }
+
+  Future<void> getPhysioEmail(String physioName, String patientEmail) async {
+    List<Map> searchResult = [];
+    //final event = await FirebaseFirestore.instance.collection("users").where("email", isEqualTo: email).get();
+    final data = await databaseRef
+        .collection('users')
+        .where('name', isEqualTo: physioName)
+        .get()
+        .then((value) {
+      if (value.docs.length < 1) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("No User Found")));
+        return null;
+      }
+
+      value.docs.forEach((user) {
+        searchResult.add(user.data());
+      });
+
+      sendEmail(
+          physioName: physioName,
+          physioEmail: searchResult[0]['email'],
+          patientEmail: patientEmail);
+    });
+  }
+
+  Future sendEmail({
+    required String physioName,
+    required String physioEmail,
+    required String patientEmail,
+  }) async {
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://yourapp.page.link',
+      link: Uri.parse('https://yourapp.com/accept-patient/$patientEmail'),
+      androidParameters: AndroidParameters(
+        packageName: 'com.example.finalyearproject',
+      ),
+      iosParameters: IOSParameters(
+        bundleId: 'com.example.finalyearproject',
+      ),
+    );
+
+    // Build the short dynamic link
+    final ShortDynamicLink shortLink =
+        await dynamicLinks.buildShortLink(parameters);
+    final Uri dynamicUrl = shortLink.shortUrl;
+
+    final serviceId = 'service_ltpchpb';
+    final templateId = 'template_wzxed06';
+    final userId = 'v_AtU5qYlO8Px4iw0';
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(
+      url,
+      headers: {
+        'origin': 'http//localhost',
+        'Content-Type': 'application/jpon',
+      },
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params': {
+          'to_name': physioName,
+          'url': dynamicUrl,
+          'to_email': physioEmail,
+        }
+      }),
+    );
+
+    print(response.body);
+
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LandingPage()));
   }
 
   @override
@@ -127,6 +223,20 @@ class _SignUpState extends State<SignUp> {
                               controller: _dobController,
                               type: TextInputType.datetime,
                               obscure: false),
+                          DropdownButton(
+                            value: selectedItem,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedItem = newValue!;
+                              });
+                            },
+                            items: items.map((String item) {
+                              return DropdownMenuItem(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
+                          ),
                           SizedBox(
                             height: 10,
                           ),
@@ -142,13 +252,6 @@ class _SignUpState extends State<SignUp> {
                                   var random = new Random();
                                   var uid = random.nextInt(900000) + 100000;
 
-                                  Users user1 = Users(
-                                      uid: uid.toString(),
-                                      name: _nameController.text,
-                                      email: _emailController.text,
-                                      phone: _phoneController.text,
-                                      dob: _dobController.text,
-                                      userType: 'Patient');
                                   collection
                                       .collection('users')
                                       .doc(uid.toString())
@@ -159,12 +262,22 @@ class _SignUpState extends State<SignUp> {
                                     'phone': _phoneController.text,
                                     'dob': _dobController.text,
                                     'userType': 'Patient',
+                                    'status': 'Pending'
                                   });
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              PatientMenu(user1)));
+                                  collection
+                                      .collection('patient')
+                                      .doc(uid.toString())
+                                      .set({
+                                    'uid': uid.toString(),
+                                    'name': _nameController.text,
+                                    'email': _emailController.text,
+                                    'phone': _phoneController.text,
+                                    'dob': _dobController.text,
+                                    'userType': 'Patient',
+                                    'physiotherapist': selectedItem,
+                                  });
+                                  getPhysioEmail(
+                                      selectedItem, _emailController.text);
                                 });
                               }
                             },
