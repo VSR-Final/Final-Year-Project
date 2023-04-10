@@ -1,5 +1,5 @@
-import 'dart.io';
 import 'dart:typed_data';
+import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseUpload{
@@ -7,7 +7,7 @@ class FirebaseUpload{
     try{
       final ref = FirebaseStorage.instance.ref(destination);
 
-      returm ref.putFile(file);
+      return ref.putFile(file);
     } on FirebaseException catch (e){
       return null;
     }

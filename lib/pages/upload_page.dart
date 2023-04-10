@@ -2,9 +2,24 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:finalyearproject/components/upload_file.dart';
 import 'package:finalyearproject/widgets/button_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart';
+import 'dart:io';
+
+import '../main.dart';
+
+
 
 
 class uploadPage extends StatefulWidget {
+  
+
+  @override
+  State<uploadPage> createState() => _uploadPageState();
+}
+class _uploadPageState extends State<uploadPage> {
   UploadTask? task;
   File? file;
 
@@ -14,14 +29,13 @@ class uploadPage extends StatefulWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(MyApp.title),
+        title: Text('PhysioAssistant'),
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.all(32),,
-        child; center(
+        padding: EdgeInsets.all(32),
           child:Column(
-            mainAxisAlignment: MainAxisAlignment.center
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ButtonWidget(
                 text: 'Select File',
@@ -44,9 +58,8 @@ class uploadPage extends StatefulWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
+      );
+}
 
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);

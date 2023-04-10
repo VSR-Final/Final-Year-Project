@@ -5,7 +5,7 @@ class ButtonWidget extends StatelessWidget{
   final String text;
   final VoidCallback onClicked;
 
-  const Button Widget({
+  const ButtonWidget({
     Key? key,
     required this.icon,
     required this.text,
@@ -23,15 +23,15 @@ class ButtonWidget extends StatelessWidget{
   );
   
   Widget buildContent() => Row(
-    mainAxisSize: mainAxisSize.min,
+    mainAxisSize: MainAxisSize.min,
     children: [
       Icon(icon, size:28),
-      SizedBox(width: 16)
+      SizedBox(width: 16),
       Text(
         text,
         style: TextStyle(fontSize:22, color: Colors.white),
       )
     ]
 
-  )
+  );
 }
