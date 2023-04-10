@@ -8,12 +8,16 @@ void initDynamicLinks() async {
   // Listen for incoming dynamic links
   try {
     final initialLink = await getInitialLink();
-    _handleDynamicLink(initialLink!);
+    if (initialLink != null){
+      _handleDynamicLink(initialLink);
+    }
   } on PlatformException {
     // Handle exception by warning the user or logging an error
   }
   linkStream.listen((link) {
-    _handleDynamicLink(link!);
+  if (link != null){
+    _handleDynamicLink(link);
+  }
   }, onError: (err) {
     // Handle exception by warning the user or logging an error
   });

@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:emailjs/emailjs.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -83,8 +84,8 @@ class _SignUpState extends State<SignUp> {
     required String patientEmail,
   }) async {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: 'https://yourapp.page.link',
-      link: Uri.parse('https://yourapp.com/accept-patient/$patientEmail'),
+      uriPrefix: 'https://physioassistant.page.link',
+      link: Uri.parse('https://physioassistant.com/accept-patient/${Uri.encodeComponent(patientEmail)}'),
       androidParameters: AndroidParameters(
         packageName: 'com.example.finalyearproject',
       ),
@@ -96,34 +97,40 @@ class _SignUpState extends State<SignUp> {
     // Build the short dynamic link
     final ShortDynamicLink shortLink =
         await dynamicLinks.buildShortLink(parameters);
-    final Uri dynamicUrl = shortLink.shortUrl;
+    final String dynamicUrl = shortLink.shortUrl.toString();
 
-    final serviceId = 'service_ltpchpb';
-    final templateId = 'template_wzxed06';
-    final userId = 'v_AtU5qYlO8Px4iw0';
 
-    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
-    final response = await http.post(
-      url,
-      headers: {
-        'origin': 'http//localhost',
-        'Content-Type': 'application/jpon',
-      },
-      body: json.encode({
-        'service_id': serviceId,
-        'template_id': templateId,
-        'user_id': userId,
-        'template_params': {
+    //final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    
+
+
+    
+ try {
+      await EmailJS.send(
+        'service_ltpchpb',
+        'template_wzxed06',
+        {
           'to_name': physioName,
           'url': dynamicUrl,
           'to_email': physioEmail,
-        }
-      }),
-    );
+        },
+        const Options(
+          publicKey: 'v_AtU5qYlO8Px4iw0',
+          privateKey: '5xVldpNGgFBZ8R2mhmAw6',
+        ),
+      );
+      print('SUCCESS!');
+    } catch (error) {
+      if (error is EmailJSResponseStatus) {
+        print('ERROR... ${error.status}: ${error.text}');
+      }
+      print(error.toString());
+    }
+  
 
-    print(response.body);
+    
 
-    Navigator.push(
+   Navigator.push(
         context, MaterialPageRoute(builder: (context) => LandingPage()));
   }
 
