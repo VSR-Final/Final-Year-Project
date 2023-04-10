@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:finalyearproject/components/EventProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -9,7 +7,7 @@ import 'package:finalyearproject/components/TaskWidget.dart';
 
 class CalendarWidget extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final events = Provider.of<EventProvider>(context).events;
     return SfCalendar(
       view: CalendarView.month,
@@ -20,7 +18,10 @@ class CalendarWidget extends StatelessWidget {
         final provider = Provider.of<EventProvider>(context, listen: false);
 
         provider.setDate(details.date!);
-        showModalBottomSheet(context: context, builder: (context) => TaskWidget(),);
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => TaskWidget(),
+        );
       },
     );
   }

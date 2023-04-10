@@ -4,13 +4,8 @@ import 'package:finalyearproject/components/glassmorphic_container.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
 import 'package:finalyearproject/pages/landing_page.dart';
 import 'package:finalyearproject/pages/login_page.dart';
-import 'package:finalyearproject/pages/patient_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:finalyearproject/models/users.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
@@ -26,33 +21,22 @@ class SignUp extends StatefulWidget {
 FirebaseFirestore collection = FirebaseFirestore.instance;
 
 class _SignUpState extends State<SignUp> {
-
   @override
-  void initState()
-  {super.initState();
-  getPhysioList();
+  void initState() {
+    super.initState();
+    getPhysioList();
   }
 
-  
   final formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  XFile? image;
   List<String> items = [];
   String selectedItem = '';
   final databaseRef = FirebaseFirestore.instance;
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
-
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      image = pickedFile;
-    });
-  }
 
   void getPhysioList() {
     print('name');
@@ -61,7 +45,6 @@ class _SignUpState extends State<SignUp> {
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        
         setState(() {
           items.add(doc.get('name'));
         });
@@ -144,7 +127,6 @@ class _SignUpState extends State<SignUp> {
         context, MaterialPageRoute(builder: (context) => LandingPage()));
   }
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -152,7 +134,6 @@ class _SignUpState extends State<SignUp> {
     double viewInset = MediaQuery.of(context).viewInsets.bottom;
     double defaultLoginSize = size.height - (size.height * 0.2);
     double defaultRegisterSize = size.height - (size.height * 0.1);
-    
 
     return Scaffold(
       body: Container(
@@ -236,7 +217,8 @@ class _SignUpState extends State<SignUp> {
                               type: TextInputType.datetime,
                               obscure: false),
                           DropdownButton<String>(
-                            value: selectedItem.isNotEmpty ? selectedItem : null,
+                            value:
+                                selectedItem.isNotEmpty ? selectedItem : null,
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedItem = newValue!;
