@@ -172,8 +172,7 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                             phone: _phoneController.text,
                             dob: _dobController.text,
                             userType: 'Physiotherapist',
-                            license: fileName!,
-                            status: 'Pending');
+                            license: fileName!);
                         collection.collection('users').doc(uid.toString()).set({
                           'uid': uid.toString(),
                           'name': _nameController.text,
@@ -182,7 +181,6 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                           'dob': _dobController.text,
                           'userType': 'Physiotherapist',
                           'license': fileName!,
-                          'status': 'Pending',
                         });
                         collection
                             .collection('physiotherapist')
@@ -195,6 +193,7 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                           'dob': _dobController.text,
                           'userType': 'Physiotherapist',
                           'license': fileName!,
+                          'status': 'Pending'
                         });
                         Navigator.push(
                             context,

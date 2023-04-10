@@ -8,7 +8,6 @@ class Users {
   final String dob;
   final String userType;
   final String license;
-  final String status;
 
   Users({
     String? uid,
@@ -18,7 +17,6 @@ class Users {
     required this.dob,
     required this.userType,
     this.license = 'Not Required for Patient',
-    required this.status,
   }) : uid = uid ?? Uuid().v4();
 
   Users.fromJson(Map<String, dynamic> json)
@@ -28,8 +26,7 @@ class Users {
         phone = json['phone'],
         dob = json['dob'],
         userType = json['userType'],
-        license = json['license'],
-        status = json['status'];
+        license = json['license'];
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -38,6 +35,5 @@ class Users {
         'dob': dob,
         'userType': userType,
         'license': license,
-        'status': status,
       };
 }

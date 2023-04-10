@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
       List<Map> searchResult = [];
       //final event = await FirebaseFirestore.instance.collection("users").where("email", isEqualTo: email).get();
       final data = await databaseRef
-          .collection('users')
+          .collection('patient')
           .where('email', isEqualTo: email)
           .get()
           .then((value) {
@@ -57,7 +57,6 @@ class _LoginState extends State<Login> {
           phone: searchResult[0]['phone'],
           dob: searchResult[0]['dob'],
           userType: searchResult[0]['userType'],
-          status: searchResult[0]['status'],
         );
         if (searchResult[0]['status'] == 'pending') {
           ScaffoldMessenger.of(context)

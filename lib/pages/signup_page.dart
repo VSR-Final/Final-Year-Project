@@ -53,7 +53,8 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  Future<void> getPhysioEmail(String physioName, String patientEmail) async {
+  Future<void> getPhysioEmail(
+      String physioName, String patientEmail, String patientName) async {
     List<Map> searchResult = [];
     //final event = await FirebaseFirestore.instance.collection("users").where("email", isEqualTo: email).get();
     final data = await databaseRef
@@ -74,7 +75,8 @@ class _SignUpState extends State<SignUp> {
       sendEmail(
           physioName: physioName,
           physioEmail: searchResult[0]['email'],
-          patientEmail: patientEmail);
+          patientEmail: patientEmail,
+          patientName: patientName);
     });
   }
 
@@ -82,37 +84,16 @@ class _SignUpState extends State<SignUp> {
     required String physioName,
     required String physioEmail,
     required String patientEmail,
+    required String patientName,
   }) async {
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: 'https://physioassistant.page.link',
-      link: Uri.parse('https://physioassistant.com/accept-patient/${Uri.encodeComponent(patientEmail)}'),
-      androidParameters: AndroidParameters(
-        packageName: 'com.example.finalyearproject',
-      ),
-      iosParameters: IOSParameters(
-        bundleId: 'com.example.finalyearproject',
-      ),
-    );
-
-    // Build the short dynamic link
-    final ShortDynamicLink shortLink =
-        await dynamicLinks.buildShortLink(parameters);
-    final String dynamicUrl = shortLink.shortUrl.toString();
-
-
-    //final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
-    
-
-
-    
- try {
+    try {
       await EmailJS.send(
         'service_ltpchpb',
         'template_wzxed06',
         {
           'to_name': physioName,
-          'url': dynamicUrl,
           'to_email': physioEmail,
+          'to_verify': patientName,
         },
         const Options(
           publicKey: 'v_AtU5qYlO8Px4iw0',
@@ -126,11 +107,8 @@ class _SignUpState extends State<SignUp> {
       }
       print(error.toString());
     }
-  
 
-    
-
-   Navigator.push(
+    Navigator.push(
         context, MaterialPageRoute(builder: (context) => LandingPage()));
   }
 
@@ -263,7 +241,6 @@ class _SignUpState extends State<SignUp> {
                                     'phone': _phoneController.text,
                                     'dob': _dobController.text,
                                     'userType': 'Patient',
-                                    'status': 'Pending'
                                   });
                                   collection
                                       .collection('patient')
@@ -276,9 +253,12 @@ class _SignUpState extends State<SignUp> {
                                     'dob': _dobController.text,
                                     'userType': 'Patient',
                                     'physiotherapist': selectedItem,
+                                    'status': 'Pending',
                                   });
                                   getPhysioEmail(
-                                      selectedItem, _emailController.text);
+                                      selectedItem,
+                                      _emailController.text,
+                                      _nameController.text);
                                 });
                               }
                             },
