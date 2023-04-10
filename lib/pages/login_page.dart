@@ -3,6 +3,7 @@ import 'package:finalyearproject/components/button.dart';
 import 'package:finalyearproject/components/glassmorphic_container.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
 import 'package:finalyearproject/pages/patient_menu.dart';
+import 'package:finalyearproject/pages/physiotherapist_menu.dart';
 import 'package:finalyearproject/pages/signup_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+   final TextEditingController _passwordController = TextEditingController();
+   final TextEditingController _emailController = TextEditingController();
+   final databaseRef = FirebaseFirestore.instance;
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -27,9 +33,7 @@ class _LoginState extends State<Login> {
     double defaultLoginSize = size.height - (size.height * 0.2);
     double defaultRegisterSize = size.height - (size.height * 0.1);
 
-    final TextEditingController _passwordController = TextEditingController();
-    final TextEditingController _emailController = TextEditingController();
-    final databaseRef = FirebaseFirestore.instance;
+   
 
     Future<Users?> getUser(String email) async {
       List<Map> searchResult = [];
@@ -44,11 +48,12 @@ class _LoginState extends State<Login> {
               .showSnackBar(SnackBar(content: Text("No User Found")));
           return null;
         }
+      
 
         value.docs.forEach((user) {
           searchResult.add(user.data());
         });
-
+          
         Users user1 = Users(
           uid: searchResult[0]['uid'],
           name: searchResult[0]['name'],
@@ -58,11 +63,12 @@ class _LoginState extends State<Login> {
           userType: searchResult[0]['userType'],
           status: searchResult[0]['status'],
         );
-        if (user1.status == 'pending') {
+        if (searchResult[0]['status'] == 'pending') {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("Account still pending")));
           return null;
         } else {
+          if (searchResult[0]['userType']== 'Patient'){
           FirebaseAuth.instance
               .signInWithEmailAndPassword(
                   email: _emailController.text,
@@ -71,9 +77,21 @@ class _LoginState extends State<Login> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => PatientMenu(user1)));
           });
+          }
+        else{
+          FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: _emailController.text,
+                  password: _passwordController.text)
+              .then((value) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PhysiotherapistMenu(user1)));
+          });
         }
-      });
+
     }
+    
+  }
 
     return Scaffold(
       body: Container(
