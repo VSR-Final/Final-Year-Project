@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 import 'package:finalyearproject/models/users.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class PhysioSignUpPage extends StatefulWidget {
   @override
@@ -25,7 +27,33 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
   Uint8List? path;
   String? fileName;
 
-  Future<void> _pickImage() async {
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    if (result == null) return;
+    final path = result.files.single.path!;
+
+    setState(() => file = File(path));
+  }
+
+  Future uploadFile() async{
+    if (file == null) return;
+
+    final fileName = basename(file!.path);
+    final destination = 'files/$fileName';
+
+    task = FirebaseUpload.uploadFile(destination, file!);
+    setState(() {});
+
+    if (task == null) return;
+
+    final snapshot = await task!.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+
+    print('Download-Link: $urlDownload');
+  }
+
+  /*Future<void> _pickImage() async {
     final LicenseStorage storage = LicenseStorage();
     final pickedFile = await FilePicker.platform.pickFiles(
       allowMultiple: false,
@@ -50,7 +78,7 @@ if (pickedFile.files.single.bytes != null && pickedFile.files.single.name != nul
 
     storage.uploadFile(path!, fileName!);
   }
-}
+}*/
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +167,7 @@ if (pickedFile.files.single.bytes != null && pickedFile.files.single.name != nul
                 ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
-                  onPressed: _pickImage,
+                  onPressed: selectFile,
                   child: Text('Submit Physiotherapist License'),
                 ),
                 // if (image != null) ...[
