@@ -1,83 +1,87 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:finalyearproject/pages/upload_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:finalyearproject/pages/patient_details.dart';
-
 import '../models/users.dart';
 
 class PatientDetailPage extends StatefulWidget {
   Users patient;
-  Users physiotherapist;
-  PatientDetailPage(this.patient, this.physiotherapist);
+  Users user;
+  PatientDetailPage(this.patient, this.user);
 
   @override
   _PatientDetailPageState createState() => _PatientDetailPageState();
 }
 
 class _PatientDetailPageState extends State<PatientDetailPage> {
-  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-  final CollectionReference patients =
-      FirebaseFirestore.instance.collection('patient');
+  bool _isAppointmentExpanded = false;
+  bool _isTreatmentPlanExpanded = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Patient List'),
+        title: Text('Patient Details'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: patients
-            .where('physiotherapist', isEqualTo: widget.physiotherapist.name)
-            .where('status', isEqualTo: 'Accepted')
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Text('Something went wrong');
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No patients found.'));
-          }
-
-          return ListView.separated(
-            padding: const EdgeInsets.all(8),
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-              String name = snapshot.data!.docs[index]['name'];
-              return GestureDetector(
-                onTap: () {
-                  Users patient = Users(
-                    uid: snapshot.data!.docs[index]['uid'],
-                    name: snapshot.data!.docs[index]['name'],
-                    email: snapshot.data!.docs[index]['email'],
-                    phone: snapshot.data!.docs[index]['phone'],
-                    dob: snapshot.data!.docs[index]['dob'],
-                    userType: snapshot.data!.docs[index]['userType'],
-                    status: snapshot.data!.docs[index]['status'],
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            uploadPage(widget.patient)),
-                  );
-                },
-                child: Card(
-                  child: ListTile(
-                    title: Text(capitalize(name)),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.patient.name,
+              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16.0),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _isAppointmentExpanded = !_isAppointmentExpanded;
+                      });
+                    },
+                    child: Text('Appointments'),
                   ),
                 ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(),
-          );
-        },
+                SizedBox(width: 16.0),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _isTreatmentPlanExpanded = !_isTreatmentPlanExpanded;
+                      });
+                    },
+                    child: Text('Treatment Plan'),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
+            if (_isAppointmentExpanded)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Appointments:',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8.0),
+                  // Add appointment data here
+                ],
+              ),
+            if (_isTreatmentPlanExpanded)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Treatment Plan:',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8.0),
+                  // Add treatment plan data here
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
