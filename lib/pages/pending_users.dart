@@ -24,7 +24,7 @@ class _PendingPatientState extends State<PendingPatientsPage> {
       body: StreamBuilder<QuerySnapshot>(
         stream: patients
             .where('physiotherapist', isEqualTo: widget.user.name)
-            .where('status', isEqualTo: 'pending')
+            .where('status', isEqualTo: 'Pending')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
@@ -80,12 +80,13 @@ class PatientCard extends StatelessWidget {
     CollectionReference patients =
         FirebaseFirestore.instance.collection('patient');
     await patients.doc(document.id).update({'status': 'Accepted'});
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('users');
+    await users.doc(document.id).update({'status': 'Accepted'});
 
     // Show a snackbar message
-    final snackbar = SnackBar(
-      content: Text('${document.get('name')} approved.'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("User Approved")));
   }
 
   void _rejectPatient(BuildContext context) async {
@@ -93,11 +94,12 @@ class PatientCard extends StatelessWidget {
     CollectionReference patients =
         FirebaseFirestore.instance.collection('patient');
     await patients.doc(document.id).update({'status': 'Rejected'});
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('users');
+    await users.doc(document.id).update({'status': 'Rejected'});
 
     // Show a snackbar message
-    final snackbar = SnackBar(
-      content: Text('${document.get('name')} rejected.'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+   ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("User Rejected")));
   }
 }

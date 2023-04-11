@@ -1,5 +1,6 @@
 import 'package:finalyearproject/components/excercise_tile.dart';
 import 'package:finalyearproject/pages/patient_schedule.dart';
+import 'package:finalyearproject/pages/pending_users.dart';
 import 'package:finalyearproject/pages/physio_home.dart';
 import 'package:finalyearproject/pages/search_user.dart';
 import 'package:finalyearproject/pages/upload_page.dart';
@@ -26,7 +27,9 @@ class _PhysiotherapistMenuState extends State<PhysiotherapistMenu> {
     pages = [
       PhysioHomePage(widget.user),
       PatientListPage(widget.user),
-      uploadPage(),
+      PatientSchedule(widget.user),
+      uploadPage(widget.user),
+      PendingPatientsPage(widget.user),
       SearchScreen(widget.user)
     ];
   }
@@ -55,6 +58,7 @@ class _PhysiotherapistMenuState extends State<PhysiotherapistMenu> {
           BottomNavigationBarItem(icon: Icon(Icons.list), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.upload), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: ''),
         ],
       ),

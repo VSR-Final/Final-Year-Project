@@ -42,7 +42,7 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
 
       return null;
     }
-
+if (pickedFile.files.single.bytes != null && pickedFile.files.single.name != null){
     setState(() {
       path = pickedFile.files.single.bytes!;
       fileName = pickedFile.files.single.name;
@@ -50,6 +50,7 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
 
     storage.uploadFile(path!, fileName!);
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +173,8 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                             phone: _phoneController.text,
                             dob: _dobController.text,
                             userType: 'Physiotherapist',
-                            license: fileName!);
+                            status: 'Pending',
+                            license: fileName.toString());
                         collection.collection('users').doc(uid.toString()).set({
                           'uid': uid.toString(),
                           'name': _nameController.text,
@@ -180,7 +182,8 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                           'phone': _phoneController.text,
                           'dob': _dobController.text,
                           'userType': 'Physiotherapist',
-                          'license': fileName!,
+                          'license': fileName.toString(),
+                          'status': 'Pending',
                         });
                         collection
                             .collection('physiotherapist')
@@ -192,7 +195,7 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
                           'phone': _phoneController.text,
                           'dob': _dobController.text,
                           'userType': 'Physiotherapist',
-                          'license': fileName!,
+                          'license': fileName.toString(),
                           'status': 'Pending'
                         });
                         Navigator.push(

@@ -56,6 +56,7 @@ class _PatientListPageState extends State<PatientListPage> {
                     phone: snapshot.data!.docs[index]['phone'],
                     dob: snapshot.data!.docs[index]['dob'],
                     userType: snapshot.data!.docs[index]['userType'],
+                    status: snapshot.data!.docs[index]['status'],
                   );
                   Navigator.push(
                     context,

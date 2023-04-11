@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:finalyearproject/models/users.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:finalyearproject/components/upload_file.dart';
 import 'package:finalyearproject/widgets/button_widget.dart';
@@ -15,7 +16,8 @@ import '../main.dart';
 
 class uploadPage extends StatefulWidget {
   
-
+Users users;
+uploadPage(this.users);
   @override
   State<uploadPage> createState() => _uploadPageState();
 }

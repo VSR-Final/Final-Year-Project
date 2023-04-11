@@ -241,6 +241,7 @@ class _SignUpState extends State<SignUp> {
                                     'phone': _phoneController.text,
                                     'dob': _dobController.text,
                                     'userType': 'Patient',
+                                    'status': 'Pending',
                                   });
                                   collection
                                       .collection('patient')

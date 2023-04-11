@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finalyearproject/pages/upload_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:finalyearproject/pages/patient_details.dart';
@@ -57,12 +58,13 @@ class _PatientDetailPageState extends State<PatientDetailPage> {
                     phone: snapshot.data!.docs[index]['phone'],
                     dob: snapshot.data!.docs[index]['dob'],
                     userType: snapshot.data!.docs[index]['userType'],
+                    status: snapshot.data!.docs[index]['status'],
                   );
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            PatientDetailPage(patient, physiotherapist)),
+                            uploadPage(widget.patient)),
                   );
                 },
                 child: Card(
