@@ -1,62 +1,81 @@
-import 'package:finalyearproject/pages/patient_schedule.dart';
-import 'package:finalyearproject/pages/physio_home.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
-import 'package:table_calendar/table_calendar.dart';
+import 'package:finalyearproject/pages/patient_details.dart';
 
-class PatientsList extends StatefulWidget {
-  const PatientsList({Key? key}) : super(key: key);
+import '../models/users.dart';
+
+class PatientListPage extends StatefulWidget {
+  Users user;
+  PatientListPage(this.user);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _PatientListPageState createState() => _PatientListPageState();
 }
 
-class _HomePageState extends State<PatientsList> {
+class _PatientListPageState extends State<PatientListPage> {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
-  Query dbpatientRef = FirebaseDatabase.instance.ref().child('Users');
-
-  Widget listPatients({required Map patients}) {
-    return Container(
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PhysioHomePage()));
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white70,
-          fixedSize: Size(400, 50),
-        ),
-        child: Center(
-          child: Text(
-            capitalize(patients['name']),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  final CollectionReference patients =
+      FirebaseFirestore.instance.collection('patient');
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
-      child: FirebaseAnimatedList(
-        query: dbpatientRef,
-        itemBuilder: (BuildContext context, DataSnapshot snapshot,
-            Animation<double> animation, int index) {
-          Map patients = snapshot.value as Map;
-          patients['key'] = snapshot.key;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Patient List'),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: patients
+            .where('physiotherapist', isEqualTo: widget.user.name)
+            .where('status', isEqualTo: 'Accepted')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
 
-          return listPatients(patients: patients);
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No patients found.'));
+          }
+
+          return ListView.separated(
+            padding: const EdgeInsets.all(8),
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              String name = snapshot.data!.docs[index]['name'];
+              return GestureDetector(
+                onTap: () {
+                  Users patient = Users(
+                    uid: snapshot.data!.docs[index]['uid'],
+                    name: snapshot.data!.docs[index]['name'],
+                    email: snapshot.data!.docs[index]['email'],
+                    phone: snapshot.data!.docs[index]['phone'],
+                    dob: snapshot.data!.docs[index]['dob'],
+                    userType: snapshot.data!.docs[index]['userType'],
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PatientDetailPage(patient, widget.user)),
+                  );
+                },
+                child: Card(
+                  child: ListTile(
+                    title: Text(capitalize(name)),
+                  ),
+                ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(),
+          );
         },
       ),
     );
-    ;
   }
 }

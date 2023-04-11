@@ -3,8 +3,12 @@ import 'package:finalyearproject/pages/patient_schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../models/users.dart';
+
 class PatientHome extends StatefulWidget {
-  const PatientHome({Key? key}) : super(key: key);
+  Users user;
+
+  PatientHome(this.user);
 
   @override
   State<PatientHome> createState() => _PatientHomeState();

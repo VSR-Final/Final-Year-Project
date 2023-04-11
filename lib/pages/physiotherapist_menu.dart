@@ -24,9 +24,8 @@ class _PhysiotherapistMenuState extends State<PhysiotherapistMenu> {
   void initState() {
     super.initState();
     pages = [
-      PhysioHomePage(),
-      PatientsList(),
-      PatientSchedule(),
+      PhysioHomePage(widget.user),
+      PatientListPage(widget.user),
       uploadPage(),
       SearchScreen(widget.user)
     ];

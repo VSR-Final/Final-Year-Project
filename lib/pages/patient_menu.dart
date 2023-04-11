@@ -21,7 +21,11 @@ class _PatientMenuState extends State<PatientMenu> {
   @override
   void initState() {
     super.initState();
-    pages = [PatientHome(), PatientSchedule(), SearchScreen(widget.user)];
+    pages = [
+      PatientHome(widget.user),
+      PatientSchedule(widget.user),
+      SearchScreen(widget.user)
+    ];
   }
 
   int currentIndex = 0;

@@ -5,8 +5,11 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../models/users.dart';
+
 class PatientSchedule extends StatefulWidget {
-  const PatientSchedule({super.key});
+  Users user;
+  PatientSchedule(this.user);
 
   @override
   _PatientScheduleState createState() => _PatientScheduleState();
@@ -36,11 +39,13 @@ class _PatientScheduleState extends State<PatientSchedule> {
       ),
       body: CalendarWidget(),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add, color: Colors.white,),
-        backgroundColor: Colors.red,
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => EventEditingPage())
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
         ),
+        backgroundColor: Colors.red,
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => EventEditingPage())),
       ),
     );
   }

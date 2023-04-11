@@ -5,8 +5,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../models/users.dart';
+
 class PhysioHomePage extends StatefulWidget {
-  const PhysioHomePage({super.key});
+  Users user;
+  PhysioHomePage(this.user);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -33,10 +36,10 @@ class _HomePageState extends State<PhysioHomePage> {
   Widget build(BuildContext context) {
     var container;
     if (_selectedOption == "Patients") {
-      container = PatientsList();
+      container = PatientListPage(widget.user);
     }
     if (_selectedOption == "Schedule") {
-      container = PatientSchedule();
+      container = PatientSchedule(widget.user);
     }
     return Scaffold(
       appBar: AppBar(
