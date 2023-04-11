@@ -7,8 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 import 'package:finalyearproject/models/users.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:finalyearproject/components/upload_file.dart';
 import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 
 class PhysioSignUpPage extends StatefulWidget {
   @override
@@ -25,34 +27,8 @@ class _PhysioSignUpPageState extends State<PhysioSignUpPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   Uint8List? path;
-  String? fileName;
-
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-
-    if (result == null) return;
-    final path = result.files.single.path!;
-
-    setState(() => file = File(path));
-  }
-
-  Future uploadFile() async{
-    if (file == null) return;
-
-    final fileName = basename(file!.path);
-    final destination = 'files/$fileName';
-
-    task = FirebaseUpload.uploadFile(destination, file!);
-    setState(() {});
-
-    if (task == null) return;
-
-    final snapshot = await task!.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
-
-    print('Download-Link: $urlDownload');
-  }
-
+  File? file;
+  
   /*Future<void> _pickImage() async {
     final LicenseStorage storage = LicenseStorage();
     final pickedFile = await FilePicker.platform.pickFiles(
@@ -82,6 +58,8 @@ if (pickedFile.files.single.bytes != null && pickedFile.files.single.name != nul
 
   @override
   Widget build(BuildContext context) {
+     final fileName = file != null ? basename(file!.path): 'No File Selected';
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Sign Up'),
@@ -165,11 +143,14 @@ if (pickedFile.files.single.bytes != null && pickedFile.files.single.name != nul
                     return null;
                   },
                 ),
+
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: selectFile,
-                  child: Text('Submit Physiotherapist License'),
+                  child: Text('Select Physiotherapist License'),
                 ),
+                SizedBox(height: 16.0),
+                
                 // if (image != null) ...[
                 //   SizedBox(height: 16.0),
                 //   Image.file(
@@ -243,4 +224,21 @@ if (pickedFile.files.single.bytes != null && pickedFile.files.single.name != nul
       ),
     );
   }
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    if (result == null) return;
+    final path = result.files.single.path!;
+
+    setState(() => file = File(path));
+    if (file == null) return;
+
+    final fileName = basename(file!.path);
+    final destination = 'files/$fileName';
+
+    FirebaseUpload.uploadFile(destination, file!);
+    setState(() {});
+  }
+
 }
