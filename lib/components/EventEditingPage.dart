@@ -4,14 +4,18 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:finalyearproject/components/utils.dart';
 import 'package:provider/src/provider.dart';
 import 'package:finalyearproject/components/EventProvider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/users.dart';
 
 
 class EventEditingPage extends StatefulWidget {
   final Event? event;
+  final Users user;
 
   const EventEditingPage({
     Key? key,
     this.event,
+    required this.user,
 }) : super (key: key);
 
   @override
@@ -27,11 +31,40 @@ class _EventEditingPageState extends State<EventEditingPage>{
   void initState() {
     super.initState();
 
+    getPatientList();
+
     if (widget.event == null){
       fromDate = DateTime.now();
       toDate = DateTime.now().add(Duration(hours: 2));
+    } else {
+      final event = widget.event!;
+
+      titleController.text = event.title;
+      fromDate = event.from;
+      toDate = event.to;
     }
 }
+
+  List<String> items = [];
+  List<String> uids = [];
+  String selectedItem = '';
+  String uid = '';
+  final databaseRef = FirebaseFirestore.instance;
+
+  void getPatientList() {
+    FirebaseFirestore.instance
+        .collection('patient').where('physiotherapist', isEqualTo: widget.user.name)
+        .where('status', isEqualTo: 'Accepted')
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        setState(() {
+          items.add(doc.get('name'));
+          uids.add(doc.get('uid'));
+        });
+      });
+    });
+  }
 
 @override
   void dispose(){
@@ -52,6 +85,24 @@ class _EventEditingPageState extends State<EventEditingPage>{
             buildTitle(),
             SizedBox(height: 12),
             buildDateTimePickers(),
+
+            DropdownButton<String>(
+              value:
+              selectedItem.isNotEmpty ? selectedItem : null,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedItem = newValue!;
+                  int index = items.indexOf(selectedItem);
+                  uid = uids[index];
+                });
+              },
+              items: items.map((String item) {
+                return DropdownMenuItem(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ),
           ],
         ),
       ),
@@ -148,12 +199,37 @@ class _EventEditingPageState extends State<EventEditingPage>{
     final isValid = _formKey.currentState!.validate();
 
     if (isValid){
-      final event = Event(title: titleController.text, description: 'description', from: fromDate, to: toDate, isAllDay: false);
 
+
+      final isEditing = widget.event != null;
       final provider = Provider.of<EventProvider>(context, listen: false);
-      provider.addEvent(event);
 
-      print('tesr');
+      if (isEditing) {
+        //editing
+
+        Navigator.of(context).pop();
+      } else {
+
+        await FirebaseFirestore.instance.collection('patient').doc(uid).collection('appointments').doc(widget.user.uid).set({
+          "title": titleController.text,
+          "description": 'description',
+          "from": fromDate,
+          "to": toDate,
+          "isAllDay": false,
+          "physiotherapist_name": widget.user.name,
+        });
+
+        await FirebaseFirestore.instance.collection('physiotherapist').doc(widget.user.uid).collection('appointments').doc(uid).set({
+          "title": titleController.text,
+          "description": 'description',
+          "from": fromDate,
+          "to": toDate,
+          "isAllDay": false,
+          "patient_name": selectedItem,
+        });
+
+      }
+
       Navigator.of(context).pop();
     }
   }

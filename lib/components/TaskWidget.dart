@@ -5,8 +5,17 @@ import 'package:finalyearproject/components/EventDataSource.dart';
 import 'package:provider/src/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:finalyearproject/components/eventViewingPage.dart';
+import '../models/users.dart';
 
 class TaskWidget extends StatefulWidget {
+  final Users user;
+
+  const TaskWidget({
+    Key? key,
+    required this.user,
+  }) : super (key: key);
+
   @override
   _TaskWidgetState createState() => _TaskWidgetState();
 }
@@ -27,13 +36,27 @@ class _TaskWidgetState extends State<TaskWidget> {
     }
 
     return SfCalendarTheme(
-      data: SfCalendarThemeData(),
+      data: SfCalendarThemeData(
+        timeTextStyle: TextStyle(fontSize: 16, color: Colors.black)
+      ),
       child: SfCalendar(
         view: CalendarView.timelineDay,
         dataSource: EventDataSource(provider.events),
         initialDisplayDate: provider.selectedDate,
+        headerHeight: 0,
+        todayHighlightColor: Colors.black,
         appointmentBuilder: appointmentBuilder,
+        selectionDecoration: BoxDecoration(
+          color: Colors.transparent,
+        ),
+        onTap: (details) {
+          if (details.appointments == null) return;
 
+          final event = details.appointments!.first;
+
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EventViewingPage(event: event, user: widget.user),
+          ));
+        },
       )
     );
   }

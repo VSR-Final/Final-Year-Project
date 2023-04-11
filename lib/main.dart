@@ -1,15 +1,16 @@
 import 'package:finalyearproject/components/EventProvider.dart';
 import 'package:finalyearproject/pages/landing_page.dart';
+import 'package:finalyearproject/pages/physio_home.dart';
+import 'package:finalyearproject/pages/physiotherapist_signUpPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'dynamicLinkListener.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  initDynamicLinks();
+  // initDynamicLinks();
   runApp(const MyApp());
 }
 

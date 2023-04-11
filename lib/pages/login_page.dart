@@ -155,6 +155,7 @@ class _LoginState extends State<Login> {
                         ElevatedButton(
                           style: buttonPrimay,
                           onPressed: () {
+
                             getUser(_emailController.text);
                           },
                           child: Text(

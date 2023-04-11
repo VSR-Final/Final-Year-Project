@@ -7,6 +7,7 @@ class Event{
   final DateTime to;
   final Color backgroundColor;
   final bool isAllDay;
+  final String name;
 
   const Event({
     required this.title,
@@ -15,5 +16,6 @@ class Event{
     required this.to,
     this.backgroundColor = Colors.deepPurpleAccent,
     this.isAllDay = false,
+    required this.name,
 });
 }

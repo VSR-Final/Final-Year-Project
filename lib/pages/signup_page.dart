@@ -40,7 +40,6 @@ class _SignUpState extends State<SignUp> {
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
   void getPhysioList() {
-    print('name');
     FirebaseFirestore.instance
         .collection('physiotherapist')
         .get()
