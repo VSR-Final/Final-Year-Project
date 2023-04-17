@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:finalyearproject/models/users.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
+import 'package:finalyearproject/components/rounded_input.dart';
 import 'dart:io';
 
 import '../main.dart';
@@ -25,9 +27,13 @@ class _uploadPageState extends State<uploadPage> {
   UploadTask? task;
   File? file;
 
+  final _nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context){
     final fileName = file != null ? basename(file!.path): 'No File Selected';
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -39,6 +45,25 @@ class _uploadPageState extends State<uploadPage> {
           child:Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text('Exercise Name: '),
+            SizedBox(height: 10,),
+            TextFormField(
+            controller: _nameController,
+            cursorColor: Colors.deepPurpleAccent,
+              decoration: InputDecoration(
+                  icon: Icon(Icons.add),
+                  hintText: 'Exercise Name',
+              ),
+            keyboardType: TextInputType.text,
+            obscureText: false,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter exercise name';
+              }
+              return null;
+            },
+          ),
+              SizedBox(height: 15,),
               ButtonWidget(
                 text: 'Select File',
                 icon: Icons.attach_file,
@@ -73,6 +98,8 @@ class _uploadPageState extends State<uploadPage> {
   }
 
   Future uploadFile() async{
+    FirebaseFirestore collection = FirebaseFirestore.instance;
+
     if (file == null) return;
 
     final fileName = basename(file!.path);
@@ -83,8 +110,18 @@ class _uploadPageState extends State<uploadPage> {
 
     if (task == null) return;
 
-    final snapshot = await task!.whenComplete(() {});
+    final snapshot = await task!.then((snapshot) {});
     final urlDownload = await snapshot.ref.getDownloadURL();
+
+    collection
+        .collection('exercises')
+        .doc(widget.users.uid)
+        .set({
+      'fileName': fileName,
+      'name': _nameController,
+      'physiotherapist': widget.users.name,
+      'downloadLink': urlDownload,
+    });
 
     print('Download-Link: $urlDownload');
   }

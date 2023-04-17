@@ -27,7 +27,6 @@ class _PhysiotherapistMenuState extends State<PhysiotherapistMenu> {
     pages = [
       PhysioHomePage(widget.user),
       PatientListPage(widget.user),
-      PatientSchedule(widget.user),
       uploadPage(widget.user),
       PendingPatientsPage(widget.user),
       SearchScreen(widget.user)
@@ -51,12 +50,13 @@ class _PhysiotherapistMenuState extends State<PhysiotherapistMenu> {
       backgroundColor: Colors.deepPurpleAccent[700],
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        fixedColor: Colors.deepPurpleAccent,
+        type: BottomNavigationBarType.fixed,
         onTap: onTap,
         currentIndex: currentIndex,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.upload), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: ''),

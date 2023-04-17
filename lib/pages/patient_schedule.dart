@@ -21,6 +21,13 @@ class PatientSchedule extends StatefulWidget {
 
 class _PatientScheduleState extends State<PatientSchedule> {
 
+  @override
+  void initState(){
+    super.initState();
+    initEvents();
+  }
+
+
   DateTime today = DateTime.now();
   Map<DateTime, List<dynamic>> _events = {
     DateTime(2022, 3, 1): ['Event A', 'Event B'],
@@ -38,7 +45,6 @@ class _PatientScheduleState extends State<PatientSchedule> {
   Widget build(BuildContext context) {
     List<Event> eventsget = [];
 
-    initEvents();
 
     return Scaffold(
       appBar: AppBar(
@@ -73,6 +79,8 @@ class _PatientScheduleState extends State<PatientSchedule> {
          to: doc.get('to').toDate(),
          isAllDay: doc.get('isAllDay'),
           name: doc.get('patient_name'));
+
+
 
         event_provider.addEvent(eventEvent);
     });
