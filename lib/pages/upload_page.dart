@@ -110,20 +110,23 @@ class _uploadPageState extends State<uploadPage> {
 
     if (task == null) return;
 
-    final snapshot = await task!.then((snapshot) {});
+    final snapshot = await task!.then((snapshot) {
+      return snapshot;
+    });
     final urlDownload = await snapshot.ref.getDownloadURL();
+    print('Download-Link: $urlDownload');
 
     collection
         .collection('exercises')
         .doc(widget.users.uid)
         .set({
       'fileName': fileName,
-      'name': _nameController,
+      'name': _nameController.text,
       'physiotherapist': widget.users.name,
       'downloadLink': urlDownload,
     });
 
-    print('Download-Link: $urlDownload');
+    
   }
 
   Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(

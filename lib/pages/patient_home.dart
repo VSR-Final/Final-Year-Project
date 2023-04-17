@@ -96,7 +96,7 @@ class _PatientHomeState extends State<PatientHome> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Excercises',
+                              'Appointments',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
