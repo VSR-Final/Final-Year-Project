@@ -1,4 +1,6 @@
 import 'package:finalyearproject/components/event.dart';
+import 'package:finalyearproject/components/exercises.dart';
+import 'package:finalyearproject/components/rounded_input.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:finalyearproject/components/utils.dart';
@@ -25,6 +27,7 @@ class EventEditingPage extends StatefulWidget {
 class _EventEditingPageState extends State<EventEditingPage>{
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
   late DateTime fromDate;
   late DateTime toDate;
   @override
@@ -32,6 +35,7 @@ class _EventEditingPageState extends State<EventEditingPage>{
     super.initState();
 
     getPatientList();
+    getExerciseList();
 
     if (widget.event == null){
       fromDate = DateTime.now();
@@ -46,9 +50,13 @@ class _EventEditingPageState extends State<EventEditingPage>{
 }
 
   List<String> items = [];
+  List<String> items2 = [];
   List<String> uids = [];
+  List<String> uids2 = [];
   String selectedItem = '';
+  String selectedItem2 = '';
   String uid = '';
+  String uid2 = '';
   final databaseRef = FirebaseFirestore.instance;
 
   void getPatientList() {
@@ -61,6 +69,20 @@ class _EventEditingPageState extends State<EventEditingPage>{
         setState(() {
           items.add(doc.get('name'));
           uids.add(doc.get('uid'));
+        });
+      });
+    });
+  }
+
+  void getExerciseList(){
+    FirebaseFirestore.instance
+        .collection('exercises')
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        setState(() {
+          items2.add(doc.get('name'));
+          uids2.add(doc.id);
         });
       });
     });
@@ -85,6 +107,11 @@ class _EventEditingPageState extends State<EventEditingPage>{
             buildTitle(),
             SizedBox(height: 12),
             buildDateTimePickers(),
+            SizedBox(height: 15,),
+
+            Text('Patient'),
+
+            SizedBox(height: 10,),
 
             DropdownButton<String>(
               value:
@@ -103,6 +130,47 @@ class _EventEditingPageState extends State<EventEditingPage>{
                 );
               }).toList(),
             ),
+            SizedBox(height: 20,),
+            Text('Exercise'),
+            SizedBox(height: 10,),
+
+            DropdownButton<String>(
+              value:
+              selectedItem2.isNotEmpty ? selectedItem2 : null,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedItem2 = newValue!;
+                  int exerciseIndex = items2.indexOf(selectedItem2);
+                  uid2 = uids2[exerciseIndex];
+                });
+              },
+              items: items2.map((String item2) {
+                return DropdownMenuItem(
+                  value: item2,
+                  child: Text(item2),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 20,),
+        InputContainer(
+          child: TextFormField(
+            controller: descriptionController,
+            cursorColor: Colors.blue,
+            decoration: InputDecoration(
+                icon: Icon(Icons.description),
+                hintText: 'extra information',
+                border: InputBorder.none,
+            ),
+            keyboardType: TextInputType.text,
+            obscureText: false,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                descriptionController == 'none';
+              }
+              return null;
+            },
+          ),
+        ),
           ],
         ),
       ),
@@ -209,23 +277,40 @@ class _EventEditingPageState extends State<EventEditingPage>{
 
         Navigator.of(context).pop();
       } else {
+        // late Exercises exercise;
+        // final data = await FirebaseFirestore.instance
+        //     .collection('exercises.dart').where('uid', isEqualTo: uid2).get();
+        //
+        // data.docs.forEach((doc) {
+        //   final eventExercise = Exercises(
+        //       exerciseID: doc.get('exerciseID'),
+        //       downloadLink: doc.get('downloadID'),
+        //       fileName: doc.get('fileName').toDate(),
+        //       name: doc.get('name'),
+        //       physiotherapistID: doc.get('physiotherapistID'));
+        //
+        //   exercise = eventExercise;
+        //
+        // });
 
         await FirebaseFirestore.instance.collection('patient').doc(uid).collection('appointments').doc(widget.user.uid).set({
           "title": titleController.text,
-          "description": 'description',
+          "description": descriptionController,
           "from": fromDate,
           "to": toDate,
           "isAllDay": false,
           "physiotherapist_name": widget.user.name,
+          "exerciseID": uid2,
         });
 
         await FirebaseFirestore.instance.collection('physiotherapist').doc(widget.user.uid).collection('appointments').doc(uid).set({
           "title": titleController.text,
-          "description": 'description',
+          "description": descriptionController,
           "from": fromDate,
           "to": toDate,
           "isAllDay": false,
           "patient_name": selectedItem,
+          "exerciseID": uid2,
         });
 
       }

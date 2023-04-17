@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finalyearproject/components/exercises.dart';
 
 class Event{
   final String title;
@@ -8,6 +9,7 @@ class Event{
   final Color backgroundColor;
   final bool isAllDay;
   final String name;
+  final String exerciseID;
 
   const Event({
     required this.title,
@@ -17,5 +19,6 @@ class Event{
     this.backgroundColor = Colors.deepPurpleAccent,
     this.isAllDay = false,
     required this.name,
+    required this.exerciseID,
 });
 }

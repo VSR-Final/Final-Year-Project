@@ -71,16 +71,14 @@ class _PatientScheduleState extends State<PatientSchedule> {
         .get();
 
     data.docs.forEach((doc) {
-      print('test');
        final eventEvent = Event(
         title: doc.get('title'),
          description: doc.get('description'),
          from: doc.get('from').toDate(),
          to: doc.get('to').toDate(),
          isAllDay: doc.get('isAllDay'),
-          name: doc.get('patient_name'));
-
-
+          name: doc.get('patient_name'),
+          exerciseID: doc.get('exerciseID'));
 
         event_provider.addEvent(eventEvent);
     });

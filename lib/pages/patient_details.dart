@@ -105,7 +105,7 @@ class _PatientDetailPageState extends State<PatientDetailPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Exercises: ${data['exercises']}',
+                                    'Exercises: ${data['exercises.dart']}',
                                     style: TextStyle(fontSize: 16.0),
                                   ),
                                   SizedBox(height: 8.0),

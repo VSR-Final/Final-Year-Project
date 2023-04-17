@@ -16,7 +16,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage>{
   @override
   Widget build(BuildContext context){
     CollectionReference videoRef = FirebaseFirestore.instance
-        .collection('exercises');
+        .collection('exercises.dart');
     return StreamBuilder<QuerySnapshot>(
         stream: videoRef.snapshots(),
         builder: (BuildContext context,
