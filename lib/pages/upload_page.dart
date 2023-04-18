@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:finalyearproject/models/users.dart';
@@ -116,14 +118,18 @@ class _uploadPageState extends State<uploadPage> {
     final urlDownload = await snapshot.ref.getDownloadURL();
     print('Download-Link: $urlDownload');
 
+    var random = new Random();
+        var exercise_uid = 'EX' + (random.nextInt(900000) + 100000).toString();
+
     collection
         .collection('exercises')
-        .doc(widget.users.uid)
+        .doc(exercise_uid)
         .set({
       'fileName': fileName,
       'name': _nameController.text,
       'physiotherapist': widget.users.name,
       'downloadLink': urlDownload,
+      'physiotherapist_id': widget.users.uid,
     });
 
     
