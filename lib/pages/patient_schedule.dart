@@ -82,6 +82,7 @@ class _PatientScheduleState extends State<PatientSchedule> {
           name: doc.get('patient_name'),
           exerciseID: doc.get('exerciseID'),
           appointmentID: doc.id,
+         isAppointment: doc.get('isAppointment'),
        );
 
 
