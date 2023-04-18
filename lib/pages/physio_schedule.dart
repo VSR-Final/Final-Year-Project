@@ -1,4 +1,3 @@
-import 'package:finalyearproject/components/PatientCalendarWidget.dart';
 import 'package:finalyearproject/components/PhysioCalendarWidget.dart';
 import 'package:finalyearproject/components/EventEditingPage.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -12,15 +11,15 @@ import 'package:finalyearproject/components/event.dart';
 import '../models/users.dart';
 import 'package:finalyearproject/components/EventProvider.dart';
 
-class PatientSchedule extends StatefulWidget {
+class PhysioSchedule extends StatefulWidget {
   Users user;
-  PatientSchedule(this.user);
+  PhysioSchedule(this.user);
 
   @override
-  _PatientScheduleState createState() => _PatientScheduleState();
+  _PhysioScheduleState createState() => _PhysioScheduleState();
 }
 
-class _PatientScheduleState extends State<PatientSchedule> {
+class _PhysioScheduleState extends State<PhysioSchedule> {
 
   @override
   void initState(){
@@ -51,7 +50,16 @@ class _PatientScheduleState extends State<PatientSchedule> {
       appBar: AppBar(
         title: Text('Schedule'),
       ),
-      body: PatientCalendarWidget(user: widget.user),
+      body: PhysioCalendarWidget(user: widget.user),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.red,
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => EventEditingPage(user: widget.user,))),
+      ),
     );
   }
 
@@ -61,7 +69,7 @@ class _PatientScheduleState extends State<PatientSchedule> {
     event_provider.deleteAll();
 
     final data = await FirebaseFirestore.instance
-        .collection('patient').doc(widget.user.uid).collection('appointments')
+        .collection('physiotherapist').doc(widget.user.uid).collection('appointments')
         .get();
 
     data.docs.forEach((doc) {
@@ -71,7 +79,7 @@ class _PatientScheduleState extends State<PatientSchedule> {
          from: doc.get('from').toDate(),
          to: doc.get('to').toDate(),
          isAllDay: doc.get('isAllDay'),
-          name: doc.get('physiotherapist_name'),
+          name: doc.get('patient_name'),
           exerciseID: doc.get('exerciseID'),
           appointmentID: doc.id,
          isAppointment: doc.get('isAppointment')

@@ -1,6 +1,6 @@
 import 'package:finalyearproject/components/excercise_tile.dart';
 import 'package:finalyearproject/pages/exercise_detail_page.dart';
-import 'package:finalyearproject/pages/patient_schedule.dart';
+import 'package:finalyearproject/pages/physio_schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -1,4 +1,4 @@
-import 'package:finalyearproject/pages/patient_schedule.dart';
+import 'package:finalyearproject/pages/physio_schedule.dart';
 import 'package:finalyearproject/pages/patients_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -39,7 +39,7 @@ class _HomePageState extends State<PhysioHomePage> {
       container = PatientListPage(widget.user);
     }
     if (_selectedOption == "Schedule") {
-      container = PatientSchedule(widget.user);
+      container = PhysioSchedule(widget.user);
     }
     return Scaffold(
       appBar: AppBar(

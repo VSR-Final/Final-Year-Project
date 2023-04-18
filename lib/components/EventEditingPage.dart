@@ -4,7 +4,7 @@ import 'package:finalyearproject/components/event.dart';
 import 'package:finalyearproject/components/exercises.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
 import 'package:finalyearproject/pages/patient_menu.dart';
-import 'package:finalyearproject/pages/patient_schedule.dart';
+import 'package:finalyearproject/pages/physio_schedule.dart';
 import 'package:finalyearproject/pages/physio_home.dart';
 import 'package:finalyearproject/pages/physiotherapist_menu.dart';
 import 'package:flutter/material.dart';

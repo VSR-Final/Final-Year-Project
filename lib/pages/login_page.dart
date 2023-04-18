@@ -7,7 +7,7 @@ import 'package:finalyearproject/pages/physiotherapist_menu.dart';
 import 'package:finalyearproject/pages/signup_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:finalyearproject/pages/patient_schedule.dart';
+import 'package:finalyearproject/pages/physio_schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/users.dart';

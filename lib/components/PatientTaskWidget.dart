@@ -1,4 +1,5 @@
 import 'package:finalyearproject/components/EventProvider.dart';
+import 'package:finalyearproject/pages/exercise_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:finalyearproject/components/EventDataSource.dart';
@@ -8,19 +9,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:finalyearproject/components/eventViewingPage.dart';
 import '../models/users.dart';
 
-class TaskWidget extends StatefulWidget {
+class PatientTaskWidget extends StatefulWidget {
   final Users user;
 
-  const TaskWidget({
+  const PatientTaskWidget({
     Key? key,
     required this.user,
   }) : super (key: key);
 
   @override
-  _TaskWidgetState createState() => _TaskWidgetState();
+  _PatientTaskWidgetState createState() => _PatientTaskWidgetState();
 }
 
-class _TaskWidgetState extends State<TaskWidget> {
+class _PatientTaskWidgetState extends State<PatientTaskWidget> {
   @override
   Widget build(BuildContext context){
     final provider = Provider.of<EventProvider>(context);
@@ -54,7 +55,7 @@ class _TaskWidgetState extends State<TaskWidget> {
 
           final event = details.appointments!.first;
 
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EventViewingPage(event: event, user: widget.user),
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ExerciseDetailPage(widget.user, event),
           ));
         },
       )
