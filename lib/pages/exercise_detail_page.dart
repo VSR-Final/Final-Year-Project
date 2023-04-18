@@ -62,6 +62,8 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage>{
                           width: 200.0,
                           fit: BoxFit.contain,
                         ),
+                        SizedBox(height: 20,),
+                        Text('extra information :' + widget.event.description)
                       ],
                     );
                   }).toList(),
