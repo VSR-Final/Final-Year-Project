@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import '../models/users.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ExerciseDetailPage extends StatefulWidget {
   Users patient;
@@ -15,8 +16,17 @@ class ExerciseDetailPage extends StatefulWidget {
 class _ExerciseDetailPageState extends State<ExerciseDetailPage>{
   @override
   Widget build(BuildContext context){
+    String? _imageUrl;
+
+    var ref = FirebaseStorage.instance.ref().child('Pushup');
+    ref.getDownloadURL().then((loc) => setState(() => _imageUrl = loc));
+    
+    FirebaseFirestore instance = FirebaseFirestore.instance;
+
     CollectionReference videoRef = FirebaseFirestore.instance
-        .collection('exercises.dart');
+        .collection('exercises');
+    
+
     return StreamBuilder<QuerySnapshot>(
         stream: videoRef.snapshots(),
         builder: (BuildContext context,

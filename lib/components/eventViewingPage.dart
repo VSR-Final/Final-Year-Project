@@ -1,4 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/components/EventEditingPage.dart';
+import 'package:finalyearproject/pages/patient_menu.dart';
+import 'package:finalyearproject/pages/physio_home.dart';
+import 'package:finalyearproject/pages/physiotherapist_menu.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:finalyearproject/components/EventProvider.dart';
 import 'package:finalyearproject/components/utils.dart';
@@ -39,11 +44,10 @@ class EventViewingPage extends StatelessWidget {
           'patient: ' + event.name,
           style: TextStyle(fontSize: 18),
         ),
+        SizedBox(height: 20,),
+        Text('extra information: ' + event.description,
+        style: TextStyle(fontSize: 18),),
         const SizedBox(height: 24,),
-        Text(
-          event.description,
-          style: TextStyle(fontSize: 18,),
-        )
       ],
     ),
   );
@@ -61,7 +65,7 @@ class EventViewingPage extends StatelessWidget {
     String text = Utils.toDate(date) + ' ' + Utils.toTime(date);
     return Column(
       children: [
-        Text(Utils.toDate(date)),
+        Text(text),
 
       ],
     );
@@ -80,8 +84,10 @@ class EventViewingPage extends StatelessWidget {
     onPressed: () {
       final provider = Provider.of<EventProvider>(context, listen: false);
 
+      FirebaseFirestore.instance.collection("physiotherapist").doc(user.uid).collection('appointments').doc(event.appointmentID).delete();
+
       provider.deleteEvent(event);
-      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  PhysiotherapistMenu(user)));
 
     }
     ),

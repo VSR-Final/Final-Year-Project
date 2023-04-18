@@ -66,6 +66,8 @@ class _PatientScheduleState extends State<PatientSchedule> {
   Future<void> initEvents() async{
     final event_provider = Provider.of<EventProvider>(context, listen: false);
 
+    event_provider.deleteAll();
+
     final data = await FirebaseFirestore.instance
         .collection('physiotherapist').doc(widget.user.uid).collection('appointments')
         .get();
@@ -78,7 +80,10 @@ class _PatientScheduleState extends State<PatientSchedule> {
          to: doc.get('to').toDate(),
          isAllDay: doc.get('isAllDay'),
           name: doc.get('patient_name'),
-          exerciseID: doc.get('exerciseID'));
+          exerciseID: doc.get('exerciseID'),
+          appointmentID: doc.id,
+       );
+
 
         event_provider.addEvent(eventEvent);
     });

@@ -10,6 +10,7 @@ class Event{
   final bool isAllDay;
   final String name;
   final String exerciseID;
+  final String appointmentID;
 
   const Event({
     required this.title,
@@ -20,5 +21,6 @@ class Event{
     this.isAllDay = false,
     required this.name,
     required this.exerciseID,
+    required this.appointmentID,
 });
 }

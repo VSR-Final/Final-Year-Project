@@ -1,6 +1,12 @@
+import 'dart:math';
+
 import 'package:finalyearproject/components/event.dart';
 import 'package:finalyearproject/components/exercises.dart';
 import 'package:finalyearproject/components/rounded_input.dart';
+import 'package:finalyearproject/pages/patient_menu.dart';
+import 'package:finalyearproject/pages/patient_schedule.dart';
+import 'package:finalyearproject/pages/physio_home.dart';
+import 'package:finalyearproject/pages/physiotherapist_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:finalyearproject/components/utils.dart';
@@ -24,12 +30,16 @@ class EventEditingPage extends StatefulWidget {
   _EventEditingPageState createState() => _EventEditingPageState();
 }
 
+enum YesNo { appointment, exercise }
+
 class _EventEditingPageState extends State<EventEditingPage>{
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   late DateTime fromDate;
   late DateTime toDate;
+  YesNo? _character = YesNo.exercise;
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +66,7 @@ class _EventEditingPageState extends State<EventEditingPage>{
   String selectedItem = '';
   String selectedItem2 = '';
   String uid = '';
-  String uid2 = '';
+  String uid2 = 'none';
   final databaseRef = FirebaseFirestore.instance;
 
   void getPatientList() {
@@ -131,26 +141,29 @@ class _EventEditingPageState extends State<EventEditingPage>{
               }).toList(),
             ),
             SizedBox(height: 20,),
-            Text('Exercise'),
-            SizedBox(height: 10,),
 
-            DropdownButton<String>(
-              value:
-              selectedItem2.isNotEmpty ? selectedItem2 : null,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedItem2 = newValue!;
-                  int exerciseIndex = items2.indexOf(selectedItem2);
-                  uid2 = uids2[exerciseIndex];
-                });
-              },
-              items: items2.map((String item2) {
-                return DropdownMenuItem(
-                  value: item2,
-                  child: Text(item2),
-                );
-              }).toList(),
-            ),
+
+            if (_character == YesNo.exercise)...[
+              Text('Exercise'),
+              SizedBox(height: 10,),
+              DropdownButton<String>(
+                value:
+                selectedItem2.isNotEmpty ? selectedItem2 : null,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedItem2 = newValue!;
+                    int exerciseIndex = items2.indexOf(selectedItem2);
+                    uid2 = uids2[exerciseIndex];
+                  });
+                },
+                items: items2.map((String item2) {
+                  return DropdownMenuItem(
+                    value: item2,
+                    child: Text(item2),
+                  );
+                }).toList(),
+              ),
+      ],
             SizedBox(height: 20,),
         InputContainer(
           child: TextFormField(
@@ -171,6 +184,33 @@ class _EventEditingPageState extends State<EventEditingPage>{
             },
           ),
         ),
+            SizedBox(height: 20,),
+            Text('Is this an appointment or schedueled exercise'),
+            SizedBox(height: 15,),
+            ListTile(
+              title: const Text('Exercise'),
+              leading: Radio<YesNo>(
+                value: YesNo.exercise,
+                groupValue: _character,
+                onChanged: (YesNo? value) {
+                  setState(() {
+                    _character = value;
+                  });
+                },
+              ),
+            ),
+            ListTile(
+              title: const Text('Appointment'),
+              leading: Radio<YesNo>(
+                value: YesNo.appointment,
+                groupValue: _character,
+                onChanged: (YesNo? value) {
+                  setState(() {
+                    _character = value;
+                  });
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -274,6 +314,30 @@ class _EventEditingPageState extends State<EventEditingPage>{
 
       if (isEditing) {
         //editing
+        await FirebaseFirestore.instance.collection('patient').doc(uid).collection('appointments').doc(widget.event!.appointmentID).set({
+          "title": titleController.text,
+          "physiotherapist_id": widget.user.uid,
+          "description": descriptionController.text,
+          "from": fromDate,
+          "to": toDate,
+          "isAllDay": false,
+          "physiotherapist_name": widget.user.name,
+          "exerciseID": uid2,
+          "isAppointment": _character.toString() == 'exercise' ? false : true,
+        });
+
+        await FirebaseFirestore.instance.collection('physiotherapist').doc(widget.user.uid).collection('appointments').doc(widget.event!.appointmentID).set({
+          "title": titleController.text,
+          "patient_id": uid,
+          "description": descriptionController.text,
+          "from": fromDate,
+          "to": toDate,
+          "isAllDay": false,
+          "patient_name": selectedItem,
+          "exerciseID": uid2,
+          "isAppointment": _character.toString() == 'exercise' ? false : true,
+        });
+
 
         Navigator.of(context).pop();
       } else {
@@ -293,29 +357,36 @@ class _EventEditingPageState extends State<EventEditingPage>{
         //
         // });
 
-        await FirebaseFirestore.instance.collection('patient').doc(uid).collection('appointments').doc(widget.user.uid).set({
+        var random = new Random();
+        var appointment_uid = 'AP' + (random.nextInt(900000) + 100000).toString();
+
+        await FirebaseFirestore.instance.collection('patient').doc(uid).collection('appointments').doc(appointment_uid).set({
           "title": titleController.text,
-          "description": descriptionController,
+          "physiotherapist_id": widget.user.uid,
+          "description": descriptionController.text,
           "from": fromDate,
           "to": toDate,
           "isAllDay": false,
           "physiotherapist_name": widget.user.name,
           "exerciseID": uid2,
+          "isAppointment": _character.toString() == 'exercise' ? false : true,
         });
 
-        await FirebaseFirestore.instance.collection('physiotherapist').doc(widget.user.uid).collection('appointments').doc(uid).set({
+        await FirebaseFirestore.instance.collection('physiotherapist').doc(widget.user.uid).collection('appointments').doc(appointment_uid).set({
           "title": titleController.text,
-          "description": descriptionController,
+          "patient_id": uid,
+          "description": descriptionController.text,
           "from": fromDate,
           "to": toDate,
           "isAllDay": false,
           "patient_name": selectedItem,
           "exerciseID": uid2,
+          "isAppointment": _character.toString() == 'exercise' ? false : true,
         });
 
       }
 
-      Navigator.of(context).pop();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => PhysiotherapistMenu(widget.user)));
     }
   }
 
@@ -363,6 +434,8 @@ class _EventEditingPageState extends State<EventEditingPage>{
         return date.add(time);
       }
   }
+
+
 
 }
 
