@@ -125,6 +125,7 @@ class _uploadPageState extends State<uploadPage> {
         .collection('exercises')
         .doc(exercise_uid)
         .set({
+      'exerciseID': exercise_uid,
       'fileName': fileName,
       'name': _nameController.text,
       'physiotherapist': widget.users.name,

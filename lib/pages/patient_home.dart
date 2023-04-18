@@ -6,10 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalyearproject/components/utils.dart';
 
+import '../components/event.dart';
 import '../models/users.dart';
 
 class PatientHome extends StatefulWidget {
   Users user;
+
 
   PatientHome(this.user);
 
@@ -142,11 +144,22 @@ class _PatientHomeState extends State<PatientHome> {
                                         userType: widget.user.userType,
                                         status: widget.user.status,
                                       );
+                                      Event event = Event(
+                                        title: snapshot.data!.docs[index]['title'],
+                                        description: snapshot.data!.docs[index]['description'],
+                                        from: snapshot.data!.docs[index]['from'].toDate(),
+                                        to: snapshot.data!.docs[index]['to'].toDate(),
+                                        isAllDay: snapshot.data!.docs[index]['isAllDay'],
+                                        name: snapshot.data!.docs[index]['physiotherapist_name'],
+                                        exerciseID: snapshot.data!.docs[index]['exerciseID'],
+                                        appointmentID: snapshot.data!.docs[index].id,
+                                        isAppointment: snapshot.data!.docs[index]['isAppointment'],
+                                      );
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                ExerciseDetailPage(widget.user)),
+                                                ExerciseDetailPage(widget.user, event)),
                                       );
                                     },
                                     child: Card(

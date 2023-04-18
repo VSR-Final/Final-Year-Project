@@ -79,7 +79,7 @@ class _PatientScheduleState extends State<PatientSchedule> {
          from: doc.get('from').toDate(),
          to: doc.get('to').toDate(),
          isAllDay: doc.get('isAllDay'),
-          name: doc.get('patient_name'),
+          name: doc.get('physiotherapist_name'),
           exerciseID: doc.get('exerciseID'),
           appointmentID: doc.id,
          isAppointment: doc.get('isAppointment'),
