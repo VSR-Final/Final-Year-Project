@@ -2,7 +2,7 @@ import 'package:finalyearproject/components/excercise_tile.dart';
 import 'package:finalyearproject/pages/physio_schedule.dart';
 import 'package:finalyearproject/pages/pending_users.dart';
 import 'package:finalyearproject/pages/physio_home.dart';
-import 'package:finalyearproject/pages/search_user.dart';
+import 'package:finalyearproject/pages/physio_search_user.dart';
 import 'package:finalyearproject/pages/upload_page.dart';
 import 'package:flutter/material.dart';
 import 'package:finalyearproject/pages/patients_list.dart';
@@ -29,7 +29,7 @@ class _PhysiotherapistMenuState extends State<PhysiotherapistMenu> {
       PatientListPage(widget.user),
       uploadPage(widget.user),
       PendingPatientsPage(widget.user),
-      SearchScreen(widget.user)
+      PhysioSearchScreen(widget.user)
     ];
   }
 

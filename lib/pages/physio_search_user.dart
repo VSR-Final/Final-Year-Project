@@ -7,18 +7,53 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/users.dart';
 
-class SearchScreen extends StatefulWidget {
+class PhysioSearchScreen extends StatefulWidget {
   Users user;
-  SearchScreen(this.user);
+  PhysioSearchScreen(this.user);
 
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  _PhysioSearchScreenState createState() => _PhysioSearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _PhysioSearchScreenState extends State<PhysioSearchScreen> {
   TextEditingController searchController = TextEditingController();
   List<Map> searchResult = [];
   bool isLoading = false;
+
+  @override
+  void initState() {
+    base();
+    super.initState();
+  }
+  void base() async {
+    setState(() {
+      searchResult = [];
+      isLoading = true;
+    });
+    await FirebaseFirestore.instance
+        .collection('patient')
+        .where("physiotherapist_uid", isEqualTo: widget.user.uid)
+        .get()
+        .then((value) {
+      if (value.docs.length < 1) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("No User Found")));
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
+      value.docs.forEach((user) {
+        if (user.data()['email'] != widget.user.email) {
+          searchResult.add(user.data());
+        }
+      });
+      setState(() {
+        isLoading = false;
+      });
+    });
+
+  }
 
   void onSearch() async {
     setState(() {

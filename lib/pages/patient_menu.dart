@@ -1,8 +1,9 @@
 import 'package:finalyearproject/components/excercise_tile.dart';
 import 'package:finalyearproject/pages/patient_schedule.dart';
+import 'package:finalyearproject/pages/patient_search_user.dart';
 import 'package:finalyearproject/pages/physio_schedule.dart';
 import 'package:finalyearproject/pages/patient_home.dart';
-import 'package:finalyearproject/pages/search_user.dart';
+import 'package:finalyearproject/pages/physio_search_user.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -25,7 +26,7 @@ class _PatientMenuState extends State<PatientMenu> {
     pages = [
       PatientHome(widget.user),
       PatientSchedule(widget.user),
-      SearchScreen(widget.user)
+      PatientSearchScreen(widget.user)
     ];
   }
 

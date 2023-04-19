@@ -37,7 +37,9 @@ class _SignUpState extends State<SignUp> {
   String errorMessage = '';
 
   List<String> items = [];
+  List<String> ids = [];
   String selectedItem = '';
+  int index = 0;
   final databaseRef = FirebaseFirestore.instance;
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
@@ -49,18 +51,19 @@ class _SignUpState extends State<SignUp> {
       querySnapshot.docs.forEach((doc) {
         setState(() {
           items.add(doc.get('name'));
+          ids.add(doc.get('uid'));
         });
       });
     });
   }
 
   Future<void> getPhysioEmail(
-      String physioName, String patientEmail, String patientName) async {
+      String physioUid, String physioName, String patientEmail, String patientName) async {
     List<Map> searchResult = [];
     //final event = await FirebaseFirestore.instance.collection("users").where("email", isEqualTo: email).get();
     final data = await databaseRef
         .collection('users')
-        .where('name', isEqualTo: physioName)
+        .where('uid', isEqualTo: physioUid)
         .get()
         .then((value) {
       if (value.docs.length < 1) {
@@ -210,6 +213,7 @@ class _SignUpState extends State<SignUp> {
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedItem = newValue!;
+                                index = items.indexOf(selectedItem);
                               });
                             },
                             items: items.map((String item) {
@@ -259,9 +263,11 @@ class _SignUpState extends State<SignUp> {
                                       'dob': _dobController.text,
                                       'userType': 'Patient',
                                       'physiotherapist': selectedItem,
+                                      'physiotherapist_uid': ids[index],
                                       'status': 'Pending',
                                     });
                                     getPhysioEmail(
+                                        ids[index],
                                         selectedItem,
                                         _emailController.text,
                                         _nameController.text);

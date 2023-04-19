@@ -31,6 +31,10 @@ For physiotherapist:
 
 For Patient:
 
+    to access app:
+        1) Sign up as patient
+        2) Wait to be accepted
+
     to view events:
         1) On the home page click on the events
         OR
