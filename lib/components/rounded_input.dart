@@ -26,6 +26,24 @@ class RoundedInput extends StatelessWidget {
           if (value == null || value.isEmpty) {
             return 'Please enter a ' + text;
           }
+
+          if (text == 'Email'){
+            String pattern = r'\w+@\w+\.\w+';
+            RegExp regex = RegExp(pattern);
+
+            if (!regex.hasMatch(value)){
+              return 'Invalid Email format';
+            }
+          }
+          if (text == 'Password'){
+            String pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$';
+            RegExp regex = RegExp(pattern);
+
+            if (!regex.hasMatch(value)){
+              return '''Password must be atleast 8 characters, 
+include an uppercase letter, number and symbol ''';
+            }
+          }
           return null;
         },
       ),

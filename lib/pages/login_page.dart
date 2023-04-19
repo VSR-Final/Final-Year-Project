@@ -35,6 +35,7 @@ class _LoginState extends State<Login> {
     Future<Users?> getUser(String email) async {
       List<Map> searchResult = [];
       //final event = await FirebaseFirestore.instance.collection("users").where("email", isEqualTo: email).get();
+
       final data = await databaseRef
           .collection('users')
           .where('email', isEqualTo: email)

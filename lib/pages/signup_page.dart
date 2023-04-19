@@ -34,6 +34,8 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
+  String errorMessage = '';
+
   List<String> items = [];
   String selectedItem = '';
   final databaseRef = FirebaseFirestore.instance;
@@ -155,6 +157,8 @@ class _SignUpState extends State<SignUp> {
                           SizedBox(
                             height: 10,
                           ),
+                          Text(errorMessage),
+                          SizedBox(height: 10,),
                           RoundedInput(
                             size: size,
                             icon: Icon(
@@ -221,45 +225,53 @@ class _SignUpState extends State<SignUp> {
                           ElevatedButton(
                             style: buttonPrimay,
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                FirebaseAuth.instance
-                                    .createUserWithEmailAndPassword(
-                                        email: _emailController.text,
-                                        password: _passwordController.text)
-                                    .then((value) {
-                                  var random = new Random();
-                                  var uid = random.nextInt(900000) + 100000;
 
-                                  collection
-                                      .collection('users')
-                                      .doc(uid.toString())
-                                      .set({
-                                    'uid': uid.toString(),
-                                    'name': _nameController.text,
-                                    'email': _emailController.text,
-                                    'phone': _phoneController.text,
-                                    'dob': _dobController.text,
-                                    'userType': 'Patient',
-                                    'status': 'Pending',
+                                if (formKey.currentState!.validate()) {
+                                  try {
+                                  FirebaseAuth.instance
+                                      .createUserWithEmailAndPassword(
+                                      email: _emailController.text,
+                                      password: _passwordController.text)
+                                      .then((value) {
+                                    var random = new Random();
+                                    var uid = random.nextInt(900000) + 100000;
+
+                                    collection
+                                        .collection('users')
+                                        .doc(uid.toString())
+                                        .set({
+                                      'uid': uid.toString(),
+                                      'name': _nameController.text,
+                                      'email': _emailController.text,
+                                      'phone': _phoneController.text,
+                                      'dob': _dobController.text,
+                                      'userType': 'Patient',
+                                      'status': 'Pending',
+                                    });
+                                    collection
+                                        .collection('patient')
+                                        .doc(uid.toString())
+                                        .set({
+                                      'uid': uid.toString(),
+                                      'name': _nameController.text,
+                                      'email': _emailController.text,
+                                      'phone': _phoneController.text,
+                                      'dob': _dobController.text,
+                                      'userType': 'Patient',
+                                      'physiotherapist': selectedItem,
+                                      'status': 'Pending',
+                                    });
+                                    getPhysioEmail(
+                                        selectedItem,
+                                        _emailController.text,
+                                        _nameController.text);
                                   });
-                                  collection
-                                      .collection('patient')
-                                      .doc(uid.toString())
-                                      .set({
-                                    'uid': uid.toString(),
-                                    'name': _nameController.text,
-                                    'email': _emailController.text,
-                                    'phone': _phoneController.text,
-                                    'dob': _dobController.text,
-                                    'userType': 'Patient',
-                                    'physiotherapist': selectedItem,
-                                    'status': 'Pending',
-                                  });
-                                  getPhysioEmail(
-                                      selectedItem,
-                                      _emailController.text,
-                                      _nameController.text);
-                                });
+                                  errorMessage = '';
+                                  } on FirebaseAuthException catch (error) {
+                                    errorMessage = error.message!;
+                                    print("ERROR: " + error.message!);
+                                }
+
                               }
                             },
                             child: Text(
@@ -313,4 +325,12 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
+}
+
+String? validateEmail(String? formEmail){
+  if (formEmail == null || formEmail.isEmpty){
+    return 'Email address is required';
+  }
+
+  return null;
 }

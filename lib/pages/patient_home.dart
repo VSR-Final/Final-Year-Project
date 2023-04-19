@@ -151,6 +151,7 @@ class _PatientHomeState extends State<PatientHome> {
                                         to: snapshot.data!.docs[index]['to'].toDate(),
                                         isAllDay: snapshot.data!.docs[index]['isAllDay'],
                                         name: snapshot.data!.docs[index]['physiotherapist_name'],
+                                        nameID: snapshot.data!.docs[index]['physiotherapist_id'],
                                         exerciseID: snapshot.data!.docs[index]['exerciseID'],
                                         appointmentID: snapshot.data!.docs[index].id,
                                         isAppointment: snapshot.data!.docs[index]['isAppointment'],

@@ -85,6 +85,7 @@ class EventViewingPage extends StatelessWidget {
       final provider = Provider.of<EventProvider>(context, listen: false);
 
       FirebaseFirestore.instance.collection("physiotherapist").doc(user.uid).collection('appointments').doc(event.appointmentID).delete();
+      FirebaseFirestore.instance.collection("patient").doc(event.nameID).collection('appointments').doc(event.appointmentID).delete();
 
       provider.deleteEvent(event);
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  PhysiotherapistMenu(user)));

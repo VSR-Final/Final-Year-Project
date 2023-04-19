@@ -80,6 +80,7 @@ class _PhysioScheduleState extends State<PhysioSchedule> {
          to: doc.get('to').toDate(),
          isAllDay: doc.get('isAllDay'),
           name: doc.get('patient_name'),
+          nameID: doc.get('patient_id'),
           exerciseID: doc.get('exerciseID'),
           appointmentID: doc.id,
          isAppointment: doc.get('isAppointment')

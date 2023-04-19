@@ -9,6 +9,7 @@ class Event{
   final Color backgroundColor;
   final bool isAllDay;
   final String name;
+  final String nameID;
   final String exerciseID;
   final bool isAppointment;
   final String appointmentID;
@@ -21,6 +22,7 @@ class Event{
     this.backgroundColor = Colors.deepPurpleAccent,
     this.isAllDay = false,
     required this.name,
+    required this.nameID,
     required this.exerciseID,
     required this.appointmentID,
     required this.isAppointment,

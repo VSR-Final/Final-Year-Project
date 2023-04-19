@@ -33,10 +33,9 @@ class EventProvider extends ChangeNotifier {
   }
 
   void deleteAll(){
-    for (final event in _events ){
-    _events.remove(event);
-    }
+    _events.clear();
     notifyListeners();
+
   }
 
   void editEvent(Event newEvent, Event oldEvent) {

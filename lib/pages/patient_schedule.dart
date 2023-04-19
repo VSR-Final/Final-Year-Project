@@ -22,10 +22,11 @@ class PatientSchedule extends StatefulWidget {
 
 class _PatientScheduleState extends State<PatientSchedule> {
 
+
   @override
   void initState(){
-    super.initState();
     initEvents();
+    super.initState();
   }
 
 
@@ -45,7 +46,6 @@ class _PatientScheduleState extends State<PatientSchedule> {
   @override
   Widget build(BuildContext context) {
     List<Event> eventsget = [];
-
 
     return Scaffold(
       appBar: AppBar(
@@ -72,6 +72,7 @@ class _PatientScheduleState extends State<PatientSchedule> {
          to: doc.get('to').toDate(),
          isAllDay: doc.get('isAllDay'),
           name: doc.get('physiotherapist_name'),
+          nameID: doc.get('physiotherapist_id'),
           exerciseID: doc.get('exerciseID'),
           appointmentID: doc.id,
          isAppointment: doc.get('isAppointment')
